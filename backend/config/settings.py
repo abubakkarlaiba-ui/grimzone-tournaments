@@ -55,9 +55,10 @@ TEMPLATES = [{
     },
 }]
 
+SQLITE_DIR = os.environ.get('SQLITE_DIR', str(BASE_DIR))
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        default='sqlite:///' + os.path.join(SQLITE_DIR, 'db.sqlite3'),
         conn_max_age=600,
         conn_health_checks=True,
     )
