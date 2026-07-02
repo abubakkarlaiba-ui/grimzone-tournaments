@@ -13,9 +13,12 @@ from django.conf import settings
 
 os.makedirs('/tmp/db', exist_ok=True)
 
-# Ensure DB path is in /tmp (env var DATABASE_URL should handle this)
-if not os.environ.get('DATABASE_URL'):
-    settings.DATABASES['default']['NAME'] = os.path.join('/tmp/db', 'db.sqlite3')
+# Override database to /tmp/db/ without uri=True to avoid URI mode issues
+settings.DATABASES['default'] = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join('/tmp/db', 'db.sqlite3'),
+    'OPTIONS': {},
+}
 
 django.setup()
 
