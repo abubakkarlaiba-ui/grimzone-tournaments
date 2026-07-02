@@ -1,8 +1,5 @@
-[build]
-  command = "pip install -r requirements.txt"
-  functions-path = "api/"
-
-[functions]
-  [functions.source]
-    path = "api"
-    type = "wsgi"
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index.py" }
+  ]
+}
