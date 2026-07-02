@@ -6,19 +6,20 @@ if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
-os.environ['SQLITE_DIR'] = '/tmp/db'
-
-os.makedirs('/tmp/db', exist_ok=True)
+os.environ.setdefault('SQLITE_DIR', '/tmp/db')
 
 import django
 from django.conf import settings
 
-# Force DB to /tmp/db/ so it's writable
-settings.DATABASES['default']['NAME'] = os.path.join('/tmp/db', 'db.sqlite3')
+os.makedirs('/tmp/db', exist_ok=True)
+
+# Ensure DB path is in /tmp (env var DATABASE_URL should handle this)
+if not os.environ.get('DATABASE_URL'):
+    settings.DATABASES['default']['NAME'] = os.path.join('/tmp/db', 'db.sqlite3')
 
 django.setup()
 
-db_path = os.path.join('/tmp/db', 'db.sqlite3')
+db_path = settings.DATABASES['default']['NAME']
 if not os.path.exists(db_path):
     from django.core.management import call_command
     call_command('migrate', '--run-syncdb', verbosity=0)
@@ -34,7 +35,6 @@ if not os.path.exists(db_path):
             {'title':'Solo Clash','type':'solo','prize_pool':'500 PKR','entry_fee':5,'total_slots':12,'slots_filled':5},
         ]:
             Tournament.objects.create(**data)
-    os.chmod(db_path, 0o666)
 
 from django.core.wsgi import get_wsgi_application
 app = get_wsgi_application()
