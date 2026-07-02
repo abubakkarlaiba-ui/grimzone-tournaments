@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: grimzone-api
+    runtime: python
+    repo: https://github.com/abubakkarlaiba-ui/grimzone-tournaments
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && gunicorn config.wsgi --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    healthCheckPath: /api/tournaments/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: .onrender.com,.vercel.app
+      - key: CORS_ALLOWED_ORIGINS
+        value: http://localhost:3000,http://127.0.0.1:3000,https://grimzone.vercel.app
+      - key: DATABASE_URL
+        fromDatabase:
+          name: grimzone-db
+          property: connectionString
+
+databases:
+  - name: grimzone-db
+    plan: free
+    region: frankfurt
+    databaseName: grimzone
+    user: grimzone
