@@ -1,6 +1,7 @@
 import os
 import sys
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 os.environ.setdefault('SQLITE_DIR', '/tmp')
 
 import django
