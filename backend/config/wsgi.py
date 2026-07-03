@@ -37,13 +37,12 @@ else:
             table_exists = cursor.fetchone()[0] > 0
             if not table_exists:
                 should_seed = True
-    except Exception as e:
+    except Exception:
         should_seed = True
 
 if should_seed:
     try:
         from django.core.management import call_command
-        sys.stderr.write(f"DEBUG: Running migrate with DATABASE_URL={database_url}\n")
         call_command('migrate', '--run-syncdb', verbosity=0)
         if use_sqlite:
             os.chmod(db_path, 0o666)
@@ -59,9 +58,8 @@ if should_seed:
                 {'title':'Solo Clash','type':'solo','prize_pool':'500 PKR','entry_fee':5,'total_slots':12,'slots_filled':5},
             ]:
                 Tournament.objects.create(**data)
-    except Exception as e:
-        sys.stderr.write(f"DEBUG: Seed error: {e}\n")
-        traceback.print_exc(file=sys.stderr)
+    except Exception:
+        traceback.print_exc()
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
