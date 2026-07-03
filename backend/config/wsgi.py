@@ -52,10 +52,10 @@ if should_seed:
             User.objects.create_superuser('admin', 'admin@grimzone.pk', 'admin123')
             User.objects.create_user('player1', 'player1@grimzone.pk', 'player123')
             for data in [
-                {'title':'Grand Battle Royale','type':'squad','prize_pool':'2000 PKR','entry_fee':25,'total_slots':50,'slots_filled':18},
-                {'title':'Squad Showdown','type':'squad','prize_pool':'1000 PKR','entry_fee':15,'total_slots':24,'slots_filled':12},
-                {'title':'Duo Rush','type':'duo','prize_pool':'800 PKR','entry_fee':10,'total_slots':20,'slots_filled':8},
-                {'title':'Solo Clash','type':'solo','prize_pool':'500 PKR','entry_fee':5,'total_slots':12,'slots_filled':5},
+                {'title':'Grand Battle Royale','type':'squad','prize_pool':'2000 PKR','entry_fee':25,'total_slots':12,'slots_filled':3},
+                {'title':'Squad Showdown','type':'squad','prize_pool':'1000 PKR','entry_fee':15,'total_slots':12,'slots_filled':5},
+                {'title':'Duo Rush','type':'duo','prize_pool':'800 PKR','entry_fee':10,'total_slots':25,'slots_filled':8},
+                {'title':'Solo Clash','type':'solo','prize_pool':'500 PKR','entry_fee':5,'total_slots':50,'slots_filled':10},
             ]:
                 Tournament.objects.create(**data)
     except Exception:

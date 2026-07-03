@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const defaultTournaments = [
-  { title: 'Grand Battle Royale', type: 'squad', prizePool: '2000 PKR', entryFee: 25, totalSlots: 50, slotsFilled: 18, time: '5:15 PM' },
-  { title: 'Squad Showdown', type: 'squad', prizePool: '1000 PKR', entryFee: 15, totalSlots: 24, slotsFilled: 12, time: '6:00 PM' },
-  { title: 'Duo Rush', type: 'duo', prizePool: '800 PKR', entryFee: 10, totalSlots: 20, slotsFilled: 8, time: '7:30 PM' },
-  { title: 'Solo Clash', type: 'solo', prizePool: '500 PKR', entryFee: 5, totalSlots: 12, slotsFilled: 5, time: '8:00 PM' },
+  { title: 'Grand Battle Royale', type: 'squad', prizePool: '2000 PKR', entryFee: 25, totalSlots: 12, slotsFilled: 3, time: '5:15 PM' },
+  { title: 'Squad Showdown', type: 'squad', prizePool: '1000 PKR', entryFee: 15, totalSlots: 12, slotsFilled: 5, time: '6:00 PM' },
+  { title: 'Duo Rush', type: 'duo', prizePool: '800 PKR', entryFee: 10, totalSlots: 25, slotsFilled: 8, time: '7:30 PM' },
+  { title: 'Solo Clash', type: 'solo', prizePool: '500 PKR', entryFee: 5, totalSlots: 50, slotsFilled: 10, time: '8:00 PM' },
 ];
 
 async function getTournaments() {

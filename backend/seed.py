@@ -30,10 +30,10 @@ else:
 
 # Create sample tournaments
 tournaments_data = [
-    {'title': 'Grand Battle Royale', 'type': 'squad', 'prize_pool': '2000 PKR', 'entry_fee': 25, 'total_slots': 50, 'slots_filled': 18, 'status': 'upcoming'},
-    {'title': 'Squad Showdown', 'type': 'squad', 'prize_pool': '1000 PKR', 'entry_fee': 15, 'total_slots': 24, 'slots_filled': 12, 'status': 'upcoming'},
-    {'title': 'Duo Rush', 'type': 'duo', 'prize_pool': '800 PKR', 'entry_fee': 10, 'total_slots': 20, 'slots_filled': 8, 'status': 'upcoming'},
-    {'title': 'Solo Clash', 'type': 'solo', 'prize_pool': '500 PKR', 'entry_fee': 5, 'total_slots': 12, 'slots_filled': 5, 'status': 'upcoming'},
+    {'title': 'Grand Battle Royale', 'type': 'squad', 'prize_pool': '2000 PKR', 'entry_fee': 25, 'total_slots': 12, 'slots_filled': 3, 'status': 'upcoming'},
+    {'title': 'Squad Showdown', 'type': 'squad', 'prize_pool': '1000 PKR', 'entry_fee': 15, 'total_slots': 12, 'slots_filled': 5, 'status': 'upcoming'},
+    {'title': 'Duo Rush', 'type': 'duo', 'prize_pool': '800 PKR', 'entry_fee': 10, 'total_slots': 25, 'slots_filled': 8, 'status': 'upcoming'},
+    {'title': 'Solo Clash', 'type': 'solo', 'prize_pool': '500 PKR', 'entry_fee': 5, 'total_slots': 50, 'slots_filled': 10, 'status': 'upcoming'},
 ]
 
 for data in tournaments_data:
