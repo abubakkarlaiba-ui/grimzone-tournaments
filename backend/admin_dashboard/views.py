@@ -90,18 +90,4 @@ class AdminRoomSetView(APIView):
         except Booking.DoesNotExist:
             return Response({'error': 'Booking not found'}, status=404)
 
-class UpdateTournamentSlotsView(APIView):
-    permission_classes = [permissions.IsAdminUser]
 
-    def post(self, request):
-        slot_map = {'solo': 50, 'duo': 25, 'squad': 12}
-        updated = []
-        for t in Tournament.objects.all():
-            new_slots = slot_map.get(t.type)
-            if new_slots and t.total_slots != new_slots:
-                t.total_slots = new_slots
-                if t.slots_filled > new_slots:
-                    t.slots_filled = new_slots
-                t.save()
-                updated.append(f'{t.title}: {t.total_slots} -> {new_slots}')
-        return Response({'status': 'ok', 'updated': updated})
