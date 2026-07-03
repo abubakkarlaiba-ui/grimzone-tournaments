@@ -1,25 +1,46 @@
-import os
 import sys
+import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-os.environ.setdefault('SQLITE_DIR', '/tmp')
 
 import django
 from django.conf import settings
 
-db_path = '/tmp/grimzone.sqlite3'
-settings.DATABASES['default'] = {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': db_path,
-    'OPTIONS': {'timeout': 20},
-}
+database_url = os.environ.get('DATABASE_URL')
+use_sqlite = not database_url
+
+if use_sqlite:
+    os.environ.setdefault('SQLITE_DIR', '/tmp')
+    db_path = '/tmp/grimzone.sqlite3'
+    settings.DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': db_path,
+        'OPTIONS': {'timeout': 20},
+    }
+else:
+    import dj_database_url
+    settings.DATABASES['default'] = dj_database_url.config(default=database_url, conn_max_age=600)
 
 django.setup()
 
-if not os.path.exists(db_path):
+should_seed = False
+
+if use_sqlite:
+    if not os.path.exists(db_path):
+        should_seed = True
+else:
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM pg_tables WHERE tablename = 'accounts_user'")
+        table_exists = cursor.fetchone()[0] > 0
+        if not table_exists:
+            should_seed = True
+
+if should_seed:
     from django.core.management import call_command
     call_command('migrate', '--run-syncdb', verbosity=0)
-    os.chmod(db_path, 0o666)
+    if use_sqlite:
+        os.chmod(db_path, 0o666)
     from accounts.models import User
     from tournaments.models import Tournament
     if not User.objects.filter(username='admin').exists():
