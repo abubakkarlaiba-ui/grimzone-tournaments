@@ -52,8 +52,8 @@ function BookingForm() {
             ))}
           </select>
         </div>
-        <button type="submit" disabled={loading || !selected} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50">
-          {loading ? 'Booking...' : 'Confirm Booking'}
+        <button type="submit" disabled={loading || !selected} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50 active:scale-[0.98]">
+          {loading ? <span className="btn-spinner" /> : 'Confirm Booking'}
         </button>
         {msg && (
           <div className={`mt-4 p-3 rounded-lg text-sm font-semibold ${msg.includes('Error') ? 'bg-[rgba(231,76,60,0.08)] border border-[rgba(231,76,60,0.15)] text-[#e74c3c]' : 'bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-[#00d4ff]'}`}>

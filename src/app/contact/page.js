@@ -11,7 +11,7 @@ export default function ContactPage() {
           <div className="text-4xl mb-3">💬</div>
           <h3 className="text-lg font-bold mb-2">WhatsApp Support</h3>
           <p className="text-sm text-[#7777aa] mb-4">Chat with our support team for bookings and queries.</p>
-          <a href="https://wa.me/923XXXXXXXXX" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#25d366,#1da851)] shadow-[0_0_16px_rgba(37,211,102,0.2)] transition-all hover:shadow-[0_0_30px_rgba(37,211,102,0.4)] hover:-translate-y-0.5">
+          <a href="https://wa.me/923XXXXXXXXX" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#25d366,#1da851)] shadow-[0_0_16px_rgba(37,211,102,0.2)] transition-all hover:shadow-[0_0_30px_rgba(37,211,102,0.4)] hover:-translate-y-0.5 active:scale-95">
             Chat on WhatsApp
           </a>
         </div>
@@ -20,7 +20,7 @@ export default function ContactPage() {
           <div className="text-4xl mb-3">📧</div>
           <h3 className="text-lg font-bold mb-2">Email Support</h3>
           <p className="text-sm text-[#7777aa] mb-4">Send us an email and we&apos;ll respond within 24 hours.</p>
-          <a href="mailto:support@grimzone.pk" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#8b5cf6,#6d28d9)] shadow-[0_0_16px_rgba(139,92,246,0.2)] transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:-translate-y-0.5">
+          <a href="mailto:support@grimzone.pk" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#8b5cf6,#6d28d9)] shadow-[0_0_16px_rgba(139,92,246,0.2)] transition-all hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:-translate-y-0.5 active:scale-95">
             Email Us
           </a>
         </div>

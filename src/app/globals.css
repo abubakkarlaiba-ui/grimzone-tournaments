@@ -23,3 +23,23 @@ body {
 ::-webkit-scrollbar-track { background: #0a0a0f; }
 ::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,212,255,0.3); }
+
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(0,212,255,0.2); }
+  50% { box-shadow: 0 0 28px rgba(0,212,255,0.4), 0 0 60px rgba(139,92,246,0.15); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}

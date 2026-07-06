@@ -41,10 +41,10 @@ export default async function HomePage() {
             Compete in Free Fire tournaments, earn tokens, and win real prizes. Join thousands of players on GrimZone.
           </p>
           <div className="flex gap-3.5 justify-center flex-wrap">
-            <Link href="/tournaments" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1">
+            <Link href="/tournaments" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1 active:scale-95">
               Browse Tournaments
             </Link>
-            <Link href="/register" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] backdrop-blur-sm transition-all hover:border-[#00d4ff] hover:text-[#00d4ff] hover:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:-translate-y-1">
+            <Link href="/register" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] backdrop-blur-sm transition-all hover:border-[#00d4ff] hover:text-[#00d4ff] hover:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:-translate-y-1 active:scale-95">
               Get Started
             </Link>
           </div>
@@ -132,7 +132,7 @@ function TournamentCard({ tournament }) {
         <span>{fill}/{total} slots filled</span>
         <span>{pct}%</span>
       </div>
-      <Link href={`/tournaments/${tournament.id || encodeURIComponent(tournament.title)}`} className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5">
+      <Link href={`/tournaments/${tournament.id || encodeURIComponent(tournament.title)}`} className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5 active:scale-[0.97]">
             View Details
         </Link>
       </div>

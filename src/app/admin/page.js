@@ -114,7 +114,7 @@ export default function AdminDashboard() {
 
       <div className="flex gap-2 mb-6 flex-wrap">
         {tabs.map((t) => (
-          <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all capitalize ${tab === t ? 'bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white shadow-[0_0_16px_rgba(0,212,255,0.15)]' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] text-[#7777aa] hover:text-white'}`}>{t}</button>
+          <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all capitalize active:scale-95 ${tab === t ? 'bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white shadow-[0_0_16px_rgba(0,212,255,0.15)]' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] text-[#7777aa] hover:text-white'}`}>{t}</button>
         ))}
         <a href="/" className="px-4 py-2 rounded-lg text-sm font-bold text-[#7777aa] hover:text-[#00d4ff] ml-auto">← Back to Site</a>
       </div>
@@ -136,8 +136,8 @@ export default function AdminDashboard() {
               <div key={p.id} className="flex justify-between items-center py-2 border-b border-[rgba(255,255,255,0.06)] last:border-0">
                 <span className="text-sm">{p.user?.username || p.userId}</span>
                 <div className="flex gap-2">
-                  <button onClick={() => handleVerify(p.id, 'verify')} className="px-2 py-0.5 rounded text-xs font-bold text-white bg-[#2ecc71]">✓</button>
-                  <button onClick={() => handleVerify(p.id, 'reject')} className="px-2 py-0.5 rounded text-xs font-bold text-white bg-[#e74c3c]">✕</button>
+                  <button onClick={() => handleVerify(p.id, 'verify')} className="px-2 py-0.5 rounded text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 hover:-translate-y-0.5 active:scale-90 transition-all">✓</button>
+                  <button onClick={() => handleVerify(p.id, 'reject')} className="px-2 py-0.5 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 hover:-translate-y-0.5 active:scale-90 transition-all">✕</button>
                 </div>
               </div>
             ))}
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
               <input type="number" value={roomForm.bookingId} onChange={e => setRoomForm({...roomForm,bookingId:e.target.value})} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="B ID" required />
               <input value={roomForm.roomId} onChange={e => setRoomForm({...roomForm,roomId:e.target.value})} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Room ID" required />
               <input value={roomForm.roomPassword} onChange={e => setRoomForm({...roomForm,roomPassword:e.target.value})} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Pass" />
-              <button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)]">Set</button>
+              <button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] hover:-translate-y-0.5 active:scale-90 transition-all">Set</button>
             </form>
           </div>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
             <form onSubmit={handleAddTokens} className="flex gap-2">
               <input value={tokenUser} onChange={e => setTokenUser(e.target.value)} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
               <input type="number" value={tokenAmount} onChange={e => setTokenAmount(e.target.value)} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Amount" required />
-              <button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[#2ecc71]">Add</button>
+              <button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 hover:-translate-y-0.5 active:scale-90 transition-all">Add</button>
             </form>
           </div>
         </div>
@@ -174,12 +174,12 @@ export default function AdminDashboard() {
               <input type="number" value={form.entryFee} onChange={e => setForm({...form,entryFee:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Entry Fee" required />
               <input type="number" value={form.totalSlots} onChange={e => setForm({...form,totalSlots:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Total Slots" />
             </div>
-            <button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#2ecc71,#27ae60)]">Create</button>
+            <button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#2ecc71,#27ae60)] hover:brightness-110 hover:-translate-y-0.5 active:scale-95 transition-all">Create</button>
           </form>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
             <table className="w-full">
               <thead><tr>{['ID','Title','Type','Prize','Slots','',''].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
-              <tbody>{tournaments.map(t => <tr key={t.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-xs text-[#7777aa]">{t.id}</td><td className="p-3 text-sm font-semibold">{t.title}</td><td className="p-3 text-sm capitalize">{t.type}</td><td className="p-3 text-sm">{t.prizePool}</td><td className="p-3 text-sm">{(t.slotsFilled ?? 0)}/{t.totalSlots ?? 10}</td><td className="p-3"><a href={`/tournaments/${t.id}`} className="text-[#00d4ff] text-xs hover:underline">View</a></td><td className="p-3"><button onClick={() => deleteTournament(t.id)} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c]">Delete</button></td></tr>)}</tbody>
+              <tbody>{tournaments.map(t => <tr key={t.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-xs text-[#7777aa]">{t.id}</td><td className="p-3 text-sm font-semibold">{t.title}</td><td className="p-3 text-sm capitalize">{t.type}</td><td className="p-3 text-sm">{t.prizePool}</td><td className="p-3 text-sm">{(t.slotsFilled ?? 0)}/{t.totalSlots ?? 10}</td><td className="p-3"><a href={`/tournaments/${t.id}`} className="text-[#00d4ff] text-xs hover:underline">View</a></td><td className="p-3"><button onClick={() => deleteTournament(t.id)} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 active:scale-90 transition-all">Delete</button></td></tr>)}</tbody>
             </table>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function AdminDashboard() {
         <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
           <table className="w-full">
             <thead><tr>{['User','Amount','Status',''].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
-            <tbody>{payments.length === 0 ? <tr><td colSpan="4" className="p-8 text-center text-[#7777aa] text-sm">No payments.</td></tr> : payments.map(p => <tr key={p.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-sm">{p.user?.username || p.userId}</td><td className="p-3 text-sm">{p.amount}</td><td className="p-3 text-sm"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${p.status === 'verified' ? 'text-[#2ecc71] bg-[rgba(46,204,113,0.1)]' : p.status === 'rejected' ? 'text-[#e74c3c] bg-[rgba(231,76,60,0.1)]' : 'text-[#f1c40f] bg-[rgba(241,196,15,0.1)]'}`}>{p.status || 'pending'}</span></td><td className="p-3">{p.status !== 'verified' && p.status !== 'rejected' && <div className="flex gap-1"><button onClick={() => handleVerify(p.id,'verify')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#2ecc71]">Verify</button><button onClick={() => handleVerify(p.id,'reject')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c]">Reject</button></div>}</td></tr>)}</tbody>
+            <tbody>{payments.length === 0 ? <tr><td colSpan="4" className="p-8 text-center text-[#7777aa] text-sm">No payments.</td></tr> : payments.map(p => <tr key={p.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-sm">{p.user?.username || p.userId}</td><td className="p-3 text-sm">{p.amount}</td><td className="p-3 text-sm"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${p.status === 'verified' ? 'text-[#2ecc71] bg-[rgba(46,204,113,0.1)]' : p.status === 'rejected' ? 'text-[#e74c3c] bg-[rgba(231,76,60,0.1)]' : 'text-[#f1c40f] bg-[rgba(241,196,15,0.1)]'}`}>{p.status || 'pending'}</span></td><td className="p-3">{p.status !== 'verified' && p.status !== 'rejected' && <div className="flex gap-1"><button onClick={() => handleVerify(p.id,'verify')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 active:scale-90 transition-all">Verify</button><button onClick={() => handleVerify(p.id,'reject')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 active:scale-90 transition-all">Reject</button></div>}</td></tr>)}</tbody>
           </table>
         </div>
       )}
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
             <div className="flex gap-3">
               <input value={tokenUser} onChange={e => setTokenUser(e.target.value)} className="flex-1 p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
               <input type="number" value={tokenAmount} onChange={e => setTokenAmount(e.target.value)} className="w-32 p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Amount" required />
-              <button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[#2ecc71]">Add</button>
+              <button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[#2ecc71] hover:brightness-110 hover:-translate-y-0.5 active:scale-95 transition-all">Add</button>
             </div>
           </form>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">

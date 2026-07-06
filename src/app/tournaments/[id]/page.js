@@ -50,7 +50,7 @@ export default async function TournamentDetail({ params }) {
             <h1 className="text-3xl font-black mt-3">{t.title}</h1>
             {t.time && <p className="text-[#f1c40f] text-sm font-semibold mt-1">⏰ {t.time}</p>}
           </div>
-          <Link href={`/booking?tournament=${encodeURIComponent(t.title)}`} className="px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1">
+          <Link href={`/booking?tournament=${encodeURIComponent(t.title)}`} className="px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1 active:scale-95">
             Book Slot
           </Link>
         </div>

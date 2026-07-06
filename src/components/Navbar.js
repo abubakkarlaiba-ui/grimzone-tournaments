@@ -53,17 +53,17 @@ export default function Navbar() {
               <Link href="/wallet" className="text-[#7777aa] hover:text-[#00d4ff] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(0,212,255,0.06)]">Wallet</Link>
               <Link href="/booking" className="text-[#7777aa] hover:text-[#00d4ff] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(0,212,255,0.06)]">Book Slot</Link>
               {user?.role === 'admin' && <Link href="/admin" className="text-[#8b5cf6] hover:text-[#00d4ff] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(0,212,255,0.06)]">Admin</Link>}
-              <button onClick={() => api.logout()} className="text-white bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(255,255,255,0.1)]">Logout</button>
+              <button onClick={() => api.logout()} className="text-white bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(255,255,255,0.1)] active:scale-95">Logout</button>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-white bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(255,255,255,0.1)]">Login</Link>
-              <Link href="/register" className="bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white px-3.5 py-2 rounded-lg text-sm font-semibold shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5">Register</Link>
+              <Link href="/login" className="text-white bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] px-3.5 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-[rgba(255,255,255,0.1)] active:scale-95">Login</Link>
+              <Link href="/register" className="bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white px-3.5 py-2 rounded-lg text-sm font-semibold shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 active:scale-95">Register</Link>
             </>
           )}
         </div>
 
-        <button onClick={() => setOpen(!open)} className="md:hidden ml-auto bg-none border-none text-white text-2xl cursor-pointer">
+        <button onClick={() => setOpen(!open)} className="md:hidden ml-auto bg-none border-none text-white text-2xl cursor-pointer active:scale-90">
           {open ? <>&times;</> : <>&#9776;</>}
         </button>
       </div>
@@ -84,12 +84,12 @@ export default function Navbar() {
             <>
               <MobileNav href="/wallet" onClick={() => setOpen(false)}>Wallet</MobileNav>
               <MobileNav href="/booking" onClick={() => setOpen(false)}>Book Slot</MobileNav>
-              <button onClick={() => { api.logout(); }} className="w-full text-center py-2.5 rounded-lg text-white bg-[rgba(255,255,255,0.06)] font-semibold">Logout</button>
+              <button onClick={() => { api.logout(); }} className="w-full text-center py-2.5 rounded-lg text-white bg-[rgba(255,255,255,0.06)] font-semibold active:scale-95">Logout</button>
             </>
           ) : (
             <>
               <MobileNav href="/login" onClick={() => setOpen(false)}>Login</MobileNav>
-              <Link href="/register" onClick={() => setOpen(false)} className="w-full text-center py-2.5 rounded-lg bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white font-bold">Register</Link>
+              <Link href="/register" onClick={() => setOpen(false)} className="w-full text-center py-2.5 rounded-lg bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white font-bold active:scale-95">Register</Link>
             </>
           )}
         </div>

@@ -73,7 +73,7 @@ function TournamentCard({ t }) {
         <div className="h-full rounded-full bg-[linear-gradient(90deg,#00d4ff,#8b5cf6)] shadow-[0_0_8px_rgba(0,212,255,0.3)]" style={{width:`${pct}%`}} />
       </div>
       <div className="flex justify-between text-xs text-[#7777aa] font-semibold mb-4"><span>{fill}/{total} slots</span><span>{pct}%</span></div>
-      <Link href={`/tournaments/${t.id}`} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5">
+      <Link href={`/tournaments/${t.id}`} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5 active:scale-[0.97]">
         View Details
       </Link>
     </div>

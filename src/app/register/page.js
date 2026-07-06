@@ -41,8 +41,8 @@ export default function RegisterPage() {
               <input type={f.includes('password')||f==='confirm'?'password':f==='email'?'email':'text'} value={form[f]} onChange={e => setForm({...form,[f]:e.target.value})} className="w-full p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff] focus:shadow-[0_0_16px_rgba(0,212,255,0.1)] transition-all" placeholder={`Enter ${f}`} required />
             </div>
           ))}
-          <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50 mt-2">
-            {loading ? 'Creating...' : 'Create Account'}
+          <button type="submit" disabled={loading} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50 mt-2 active:scale-[0.98]">
+            {loading ? <span className="btn-spinner" /> : 'Create Account'}
           </button>
         </form>
         <div className="text-center mt-4 text-sm text-[#7777aa]">

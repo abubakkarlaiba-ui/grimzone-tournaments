@@ -65,7 +65,7 @@ export default function WalletPage() {
         <h4 className="font-bold mb-3">Upload Payment Screenshot</h4>
         <p className="text-xs text-[#7777aa] mb-4">Pay via JazzCash/EasyPaisa to <strong className="text-white">03XX-XXXXXXX</strong> and upload the screenshot below.</p>
         <input type="file" name="screenshot" accept="image/*" required className="w-full text-sm text-[#7777aa] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[rgba(0,212,255,0.12)] file:text-[#00d4ff] hover:file:bg-[rgba(0,212,255,0.2)] mb-4" />
-        <button type="submit" disabled={selected === null} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50">
+        <button type="submit" disabled={selected === null} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50 active:scale-[0.98]">
           Submit Payment
         </button>
         {msg && <div className="mt-4 p-3 rounded-lg text-sm font-semibold bg-[rgba(46,204,113,0.08)] border border-[rgba(46,204,113,0.15)] text-[#2ecc71]">{msg}</div>}
