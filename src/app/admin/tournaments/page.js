@@ -1,24 +1,22 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import Link from 'next/link';
+import AdminSidebar from '@/components/AdminSidebar';
 
 export default function AdminTournaments() {
   const [tournaments, setTournaments] = useState([]);
   const [msg, setMsg] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: 10 });
+  const [form, setForm] = useState({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: '' });
 
   useEffect(() => {
-    if (!api.isLoggedIn() || !api.isAdmin()) window.location.href = '/login';
-    else load();
+    api.init();
+    if (!api.isLoggedIn() || !api.isAdmin()) { window.location.href = '/login'; return; }
+    load();
   }, []);
 
   async function load() {
-    try {
-      const data = await api.getTournaments();
-      setTournaments(data);
-    } catch {}
+    try { setTournaments(await api.getTournaments()); } catch {}
   }
 
   async function handleCreate(e) {
@@ -27,7 +25,7 @@ export default function AdminTournaments() {
       await api.createTournament(form);
       setMsg('Tournament created!');
       setShowForm(false);
-      setForm({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: 10 });
+      setForm({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: '' });
       load();
     } catch (err) { setMsg('Error: ' + err.message); }
   }
@@ -43,14 +41,7 @@ export default function AdminTournaments() {
 
   return (
     <div className="flex min-h-[80vh]">
-      <aside className="w-56 bg-[#111122] border-r border-[rgba(255,255,255,0.06)] p-6 hidden md:block fixed top-16 left-0 bottom-0 overflow-y-auto">
-        <div className="text-lg font-black text-white mb-6" style={{textShadow:'0 0 16px rgba(0,212,255,0.2)'}}>⚔️ Admin</div>
-        <Link href="/admin" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Dashboard</Link>
-        <Link href="/admin/payments" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Verify Payments</Link>
-        <Link href="/admin/tournaments" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold bg-[rgba(0,212,255,0.08)] text-[#00d4ff] transition-all mb-1">Tournaments</Link>
-        <Link href="/admin/users" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Users</Link>
-        <Link href="/" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mt-4">← Back to Site</Link>
-      </aside>
+      <AdminSidebar />
       <div className="flex-1 md:ml-56 p-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-extrabold">Manage Tournaments</h2>
@@ -76,6 +67,7 @@ export default function AdminTournaments() {
           <table className="w-full">
             <thead>
               <tr>
+                <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">ID</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Title</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Type</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Prize</th>
@@ -85,15 +77,16 @@ export default function AdminTournaments() {
             </thead>
             <tbody>
               {tournaments.length === 0 ? (
-                <tr><td colSpan="5" className="p-8 text-center text-[#7777aa] text-sm">No tournaments yet.</td></tr>
-              ) : tournaments.map((t, i) => (
-                <tr key={i} className="border-b border-[rgba(255,255,255,0.06)] last:border-b-0">
+                <tr><td colSpan="6" className="p-8 text-center text-[#7777aa] text-sm">No tournaments yet.</td></tr>
+              ) : tournaments.map((t) => (
+                <tr key={t.id} className="border-b border-[rgba(255,255,255,0.06)] last:border-b-0">
+                  <td className="p-3.5 text-sm text-[#7777aa]">{t.id}</td>
                   <td className="p-3.5 text-sm font-semibold">{t.title}</td>
                   <td className="p-3.5 text-sm capitalize">{t.type}</td>
                   <td className="p-3.5 text-sm">{t.prizePool}</td>
                   <td className="p-3.5 text-sm">{(t.slotsFilled ?? 0)}/{t.totalSlots ?? 10}</td>
                   <td className="p-3.5 text-sm">
-                    <button onClick={() => handleDelete(t._id || t.id)} className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#e74c3c,#c0392b)] transition-all hover:shadow-[0_0_16px_rgba(231,76,60,0.3)]">Delete</button>
+                    <button onClick={() => handleDelete(t.id)} className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#e74c3c,#c0392b)] transition-all hover:shadow-[0_0_16px_rgba(231,76,60,0.3)]">Delete</button>
                   </td>
                 </tr>
               ))}

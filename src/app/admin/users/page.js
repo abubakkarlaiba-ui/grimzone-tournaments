@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import Link from 'next/link';
+import AdminSidebar from '@/components/AdminSidebar';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -10,15 +10,13 @@ export default function AdminUsers() {
   const [tokenAmount, setTokenAmount] = useState('');
 
   useEffect(() => {
-    if (!api.isLoggedIn() || !api.isAdmin()) window.location.href = '/login';
-    else load();
+    api.init();
+    if (!api.isLoggedIn() || !api.isAdmin()) { window.location.href = '/login'; return; }
+    load();
   }, []);
 
   async function load() {
-    try {
-      const data = await api.getUsers();
-      setUsers(data);
-    } catch {}
+    try { setUsers(await api.getUsers()); } catch {}
   }
 
   async function handleAddTokens(e) {
@@ -35,14 +33,7 @@ export default function AdminUsers() {
 
   return (
     <div className="flex min-h-[80vh]">
-      <aside className="w-56 bg-[#111122] border-r border-[rgba(255,255,255,0.06)] p-6 hidden md:block fixed top-16 left-0 bottom-0 overflow-y-auto">
-        <div className="text-lg font-black text-white mb-6" style={{textShadow:'0 0 16px rgba(0,212,255,0.2)'}}>⚔️ Admin</div>
-        <Link href="/admin" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Dashboard</Link>
-        <Link href="/admin/payments" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Verify Payments</Link>
-        <Link href="/admin/tournaments" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mb-1">Tournaments</Link>
-        <Link href="/admin/users" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold bg-[rgba(0,212,255,0.08)] text-[#00d4ff] transition-all mb-1">Users</Link>
-        <Link href="/" className="block py-2.5 px-3.5 rounded-lg text-sm font-semibold text-[#7777aa] hover:text-[#00d4ff] hover:bg-[rgba(0,212,255,0.08)] transition-all mt-4">← Back to Site</Link>
-      </aside>
+      <AdminSidebar />
       <div className="flex-1 md:ml-56 p-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-extrabold">Users</h2>
@@ -62,6 +53,7 @@ export default function AdminUsers() {
           <table className="w-full">
             <thead>
               <tr>
+                <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">ID</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Username</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Email</th>
                 <th className="text-left p-3.5 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">Tokens</th>
@@ -70,9 +62,10 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {users.length === 0 ? (
-                <tr><td colSpan="4" className="p-8 text-center text-[#7777aa] text-sm">No users yet.</td></tr>
-              ) : users.map((u, i) => (
-                <tr key={i} className="border-b border-[rgba(255,255,255,0.06)] last:border-b-0">
+                <tr><td colSpan="5" className="p-8 text-center text-[#7777aa] text-sm">No users yet.</td></tr>
+              ) : users.map((u) => (
+                <tr key={u.id} className="border-b border-[rgba(255,255,255,0.06)] last:border-b-0">
+                  <td className="p-3.5 text-sm text-[#7777aa]">{u.id}</td>
                   <td className="p-3.5 text-sm font-semibold">{u.username}</td>
                   <td className="p-3.5 text-sm">{u.email}</td>
                   <td className="p-3.5 text-sm">{u.tokens ?? 0}</td>

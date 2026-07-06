@@ -68,6 +68,8 @@ export const api = {
   getUsers() { return this.request('GET', '/admin/users/'); },
   addTokens(userId, amount) { return this.request('POST', '/admin/tokens/', { userId, amount }); },
   getAdminStats() { return this.request('GET', '/admin/stats/'); },
+  getAdminBookings() { return this.request('GET', '/admin/bookings/'); },
+  setRoomId(bookingId, roomId, roomPassword) { return this.request('POST', '/admin/set-room/', { bookingId, roomId, roomPassword }); },
 };
 
 api.init();
