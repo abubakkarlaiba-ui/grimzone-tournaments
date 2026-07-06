@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const defaultTournaments = [
-  { title: 'Grand Battle Royale', type: 'squad', prizePool: '2000 PKR', entryFee: 25, totalSlots: 12, slotsFilled: 3, time: '5:15 PM' },
-  { title: 'Squad Showdown', type: 'squad', prizePool: '1000 PKR', entryFee: 15, totalSlots: 12, slotsFilled: 5, time: '6:00 PM' },
-  { title: 'Duo Rush', type: 'duo', prizePool: '800 PKR', entryFee: 10, totalSlots: 25, slotsFilled: 8, time: '7:30 PM' },
-  { title: 'Solo Clash', type: 'solo', prizePool: '500 PKR', entryFee: 5, totalSlots: 50, slotsFilled: 10, time: '8:00 PM' },
+  { id:1, title:'Grand Battle Royale', type:'squad', prizePool:'2000 PKR', entryFee:25, totalSlots:12, slotsFilled:3, time:'5:15 PM' },
+  { id:2, title:'Squad Showdown', type:'squad', prizePool:'1000 PKR', entryFee:15, totalSlots:12, slotsFilled:5, time:'6:00 PM' },
+  { id:3, title:'Duo Rush', type:'duo', prizePool:'800 PKR', entryFee:10, totalSlots:25, slotsFilled:8, time:'7:30 PM' },
+  { id:4, title:'Solo Clash', type:'solo', prizePool:'500 PKR', entryFee:5, totalSlots:50, slotsFilled:10, time:'8:00 PM' },
 ];
 
 async function getTournaments() {
@@ -73,8 +73,8 @@ function TournamentCard({ t }) {
         <div className="h-full rounded-full bg-[linear-gradient(90deg,#00d4ff,#8b5cf6)] shadow-[0_0_8px_rgba(0,212,255,0.3)]" style={{width:`${pct}%`}} />
       </div>
       <div className="flex justify-between text-xs text-[#7777aa] font-semibold mb-4"><span>{fill}/{total} slots</span><span>{pct}%</span></div>
-      <Link href={`/booking?tournament=${encodeURIComponent(t.title)}`} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5">
-        Book Slot
+      <Link href={`/tournaments/${t.id}`} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.15)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.3)] hover:-translate-y-0.5">
+        View Details
       </Link>
     </div>
   );
