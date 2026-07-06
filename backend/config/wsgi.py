@@ -1,6 +1,7 @@
 import sys
 import os
 import traceback
+import tempfile
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
@@ -11,16 +12,14 @@ database_url = os.environ.get('DATABASE_URL')
 use_sqlite = not database_url
 
 if use_sqlite:
-    os.environ.setdefault('SQLITE_DIR', '/tmp')
-    db_path = '/tmp/grimzone.sqlite3'
-    settings.DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': db_path,
-        'OPTIONS': {'timeout': 20},
-    }
+    db_path = os.path.join(tempfile.gettempdir(), 'grimzone.sqlite3')
+    settings.DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+    settings.DATABASES['default']['NAME'] = db_path
+    settings.DATABASES['default']['OPTIONS'] = {'timeout': 20}
 else:
     import dj_database_url
-    settings.DATABASES['default'] = dj_database_url.config(default=database_url, conn_max_age=600)
+    pg_config = dj_database_url.config(default=database_url, conn_max_age=600)
+    settings.DATABASES['default'].update(pg_config)
 
 django.setup()
 
@@ -44,8 +43,6 @@ if should_seed:
     try:
         from django.core.management import call_command
         call_command('migrate', '--run-syncdb', verbosity=0)
-        if use_sqlite:
-            os.chmod(db_path, 0o666)
         from accounts.models import User
         from tournaments.models import Tournament
         if not User.objects.filter(username='admin').exists():
