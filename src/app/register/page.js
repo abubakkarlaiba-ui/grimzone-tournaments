@@ -14,6 +14,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     if (form.password !== form.confirm) { setError('Passwords do not match'); return; }
+    if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
     setLoading(true);
     try {
       await api.register(form.username, form.email, form.password);

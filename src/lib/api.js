@@ -19,8 +19,24 @@ export const api = {
     if (this.token) opts.headers.Authorization = `Bearer ${this.token}`;
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(`${API_BASE}${path}`, opts);
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.detail || 'Request failed');
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      if (!res.ok) throw new Error(`Server error (${res.status})`);
+      return {};
+    }
+    if (!res.ok) {
+      const msgs = [];
+      if (typeof data === 'object' && data !== null) {
+        if (data.error) msgs.push(data.error);
+        if (data.detail) msgs.push(data.detail);
+        for (const [field, errors] of Object.entries(data)) {
+          if (Array.isArray(errors)) msgs.push(errors.join(' '));
+        }
+      }
+      throw new Error(msgs.join(' ') || 'Request failed');
+    }
     return data;
   },
 
