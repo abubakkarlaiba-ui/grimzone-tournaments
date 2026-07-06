@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
     'accounts',
     'tournaments',
     'wallet',
@@ -62,6 +64,16 @@ DATABASES = {
         conn_max_age=600,
         conn_health_checks=True,
     )
+}
+
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage' if CLOUDINARY_URL else 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
 }
 
 AUTH_USER_MODEL = 'accounts.User'
