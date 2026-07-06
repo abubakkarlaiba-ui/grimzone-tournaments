@@ -6,17 +6,24 @@ import { api } from '@/lib/api';
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [balance, setBalance] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(api.isLoggedIn());
+  const [user, setUser] = useState(api.user);
 
-  useEffect(() => {
+  function refresh() {
     setLoggedIn(api.isLoggedIn());
     setUser(api.user);
     if (api.isLoggedIn()) {
       const tokens = api.user?.tokens ?? 0;
       setBalance(tokens);
       api.getWallet().then(d => { setBalance(d.tokens); }).catch(() => {});
+    } else {
+      setBalance(null);
     }
+  }
+
+  useEffect(() => {
+    refresh();
+    return api.subscribe(refresh);
   }, []);
 
   return (

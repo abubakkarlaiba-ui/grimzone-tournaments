@@ -14,6 +14,7 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (!username.trim() || !password.trim()) { setError('Please fill in all fields'); return; }
     setLoading(true);
     try {
       await api.login(username, password);

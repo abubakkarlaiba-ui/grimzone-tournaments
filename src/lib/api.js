@@ -1,4 +1,9 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+const listeners = new Set();
+
+function notify() {
+  listeners.forEach(fn => fn());
+}
 
 export const api = {
   token: null,
@@ -9,6 +14,11 @@ export const api = {
       this.token = localStorage.getItem('gz_token');
       this.user = JSON.parse(localStorage.getItem('gz_user') || 'null');
     }
+  },
+
+  subscribe(fn) {
+    listeners.add(fn);
+    return () => listeners.delete(fn);
   },
 
   async request(method, path, body) {
@@ -46,6 +56,7 @@ export const api = {
     this.user = data.user;
     localStorage.setItem('gz_token', data.token);
     localStorage.setItem('gz_user', JSON.stringify(data.user));
+    notify();
     return data;
   },
 
@@ -55,6 +66,7 @@ export const api = {
     this.user = data.user;
     localStorage.setItem('gz_token', data.token);
     localStorage.setItem('gz_user', JSON.stringify(data.user));
+    notify();
     return data;
   },
 
@@ -63,6 +75,7 @@ export const api = {
     this.user = null;
     localStorage.removeItem('gz_token');
     localStorage.removeItem('gz_user');
+    notify();
     if (typeof window !== 'undefined') window.location.href = '/';
   },
 
