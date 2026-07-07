@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const defaultTournaments = [
-  { id:1, title:'Grand Battle Royale', type:'squad', prizePool:'2000 PKR', entryFee:25, totalSlots:12, slotsFilled:3, time:'5:15 PM' },
-  { id:2, title:'Squad Showdown', type:'squad', prizePool:'1000 PKR', entryFee:15, totalSlots:12, slotsFilled:5, time:'6:00 PM' },
-  { id:3, title:'Duo Rush', type:'duo', prizePool:'800 PKR', entryFee:10, totalSlots:25, slotsFilled:8, time:'7:30 PM' },
-  { id:4, title:'Solo Clash', type:'solo', prizePool:'500 PKR', entryFee:5, totalSlots:50, slotsFilled:10, time:'8:00 PM' },
+  { id:1, title:'Grand Battle Royale', type:'squad', prize_pool:'2000 PKR', entry_fee:25, total_slots:12, slots_filled:3, time:'5:15 PM' },
+  { id:2, title:'Squad Showdown', type:'squad', prize_pool:'1000 PKR', entry_fee:15, total_slots:12, slots_filled:5, time:'6:00 PM' },
+  { id:3, title:'Duo Rush', type:'duo', prize_pool:'800 PKR', entry_fee:10, total_slots:25, slots_filled:8, time:'7:30 PM' },
+  { id:4, title:'Solo Clash', type:'solo', prize_pool:'500 PKR', entry_fee:5, total_slots:50, slots_filled:10, time:'8:00 PM' },
 ];
 
 async function getTournaments() {
@@ -43,8 +43,8 @@ export default async function TournamentsPage() {
 }
 
 function TournamentCard({ t }) {
-  const fill = t.slotsFilled ?? 0;
-  const total = t.totalSlots ?? 10;
+  const fill = t.slots_filled ?? 0;
+  const total = t.total_slots ?? 10;
   const pct = Math.round((fill / total) * 100);
   const typeColor = t.type === 'solo' ? '#00d4ff' : t.type === 'duo' ? '#8b5cf6' : '#ffd700';
   return (
@@ -62,11 +62,11 @@ function TournamentCard({ t }) {
       <div className="grid grid-cols-2 gap-2 my-4">
         <div className="bg-[rgba(255,255,255,0.03)] p-2.5 rounded-lg text-center">
           <div className="text-[0.7rem] text-[#7777aa] uppercase font-semibold">Prize</div>
-          <div className="text-lg font-extrabold text-white mt-0.5">{t.prizePool}</div>
+          <div className="text-lg font-extrabold text-white mt-0.5">{t.prize_pool}</div>
         </div>
         <div className="bg-[rgba(255,255,255,0.03)] p-2.5 rounded-lg text-center">
           <div className="text-[0.7rem] text-[#7777aa] uppercase font-semibold">Entry</div>
-          <div className="text-lg font-extrabold text-[#00d4ff] mt-0.5">{t.entryFee} FF</div>
+          <div className="text-lg font-extrabold text-[#00d4ff] mt-0.5">{t.entry_fee} FF</div>
         </div>
       </div>
       <div className="w-full h-1.5 bg-[rgba(255,255,255,0.06)] rounded-full my-3 overflow-hidden">

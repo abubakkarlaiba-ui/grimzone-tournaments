@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'bookings',
     'payments',
     'admin_dashboard',
+    'teams',
 ]
 
 MIDDLEWARE = [

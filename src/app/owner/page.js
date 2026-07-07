@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
 
-export default function AdminDashboard() {
+export default function OwnerDashboard() {
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [tournaments, setTournaments] = useState([]);
@@ -23,8 +23,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     api.init();
-    if (!api.isLoggedIn() || !api.isAdmin()) { window.location.href = '/login'; return; }
-    if (api.isOwner()) { window.location.href = '/owner'; return; }
+    if (!api.isLoggedIn() || !api.isOwner()) { window.location.href = '/login'; return; }
     setUser(api.user);
     api.getAdminStats().then(setStats).catch(() => {});
     api.getTournaments().then(setTournaments).catch(() => {});
@@ -34,9 +33,7 @@ export default function AdminDashboard() {
   }, []);
 
   if (!user) return <div className="text-center py-20 text-[#7777aa]">Loading...</div>;
-  if (!api.isAdmin()) return <div className="text-center py-20 text-[#7777aa]"><div className="text-4xl mb-4">🚫</div><h3 className="text-lg font-bold text-white mb-2">Access Denied</h3></div>;
-
-  const isOwner = api.isOwner();
+  if (!api.isOwner()) return <div className="text-center py-20 text-[#7777aa]"><div className="text-4xl mb-4">🚫</div><h3 className="text-lg font-bold text-white mb-2">Access Denied</h3><p className="text-sm">Only the owner can access this page.</p></div>;
 
   const statsCards = [
     { icon: '👥', label: 'Users', value: stats?.total_users ?? '-' },
@@ -57,10 +54,8 @@ export default function AdminDashboard() {
       });
       showMsg('Tournament created!');
       setForm({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: '' });
-      const data = await api.getTournaments();
-      setTournaments(data);
-      const s = await api.getAdminStats();
-      setStats(s);
+      setTournaments(await api.getTournaments());
+      setStats(await api.getAdminStats());
     } catch (err) { showMsg('Error: ' + err.message, true); }
   }
 
@@ -133,11 +128,12 @@ export default function AdminDashboard() {
   return (
     <div className="max-w-6xl mx-auto px-5 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-extrabold">Admin Dashboard</h2>
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">👑</span>
+          <h2 className="text-2xl font-extrabold">Owner Dashboard</h2>
+        </div>
         <div className="flex items-center gap-2">
-          <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold uppercase bg-[rgba(139,92,246,0.12)] text-[#8b5cf6] border border-[rgba(139,92,246,0.2)]">
-            {user.role === 'owner' ? '👑 Owner' : 'Admin'}
-          </span>
+          <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold uppercase bg-[rgba(139,92,246,0.12)] text-[#8b5cf6] border border-[rgba(139,92,246,0.2)]">👑 Owner</span>
           <span className="text-sm text-[#7777aa]">{user.username}</span>
         </div>
       </div>
@@ -156,7 +152,7 @@ export default function AdminDashboard() {
 
       <div className="flex gap-2 mb-6 flex-wrap">
         {tabs.map((t) => (
-          <Button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all capitalize active:scale-95 ${tab === t ? 'bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] text-white shadow-[0_0_16px_rgba(0,212,255,0.15)]' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] text-[#7777aa] hover:text-white'}`}>{t}</Button>
+          <Button key={t} onClick={() => setTab(t)} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all capitalize active:scale-95 ${tab === t ? 'bg-[linear-gradient(135deg,#8b5cf6,#00d4ff)] text-white shadow-[0_0_16px_rgba(139,92,246,0.2)]' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] text-[#7777aa] hover:text-white'}`}>{t}</Button>
         ))}
         <a href="/" className="px-4 py-2 rounded-lg text-sm font-bold text-[#7777aa] hover:text-[#00d4ff] ml-auto">← Back to Site</a>
       </div>
@@ -186,16 +182,16 @@ export default function AdminDashboard() {
             {payments.filter(p => p.status === 'pending').length === 0 && <p className="text-sm text-[#7777aa]">None pending.</p>}
           </div>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-            <h3 className="font-bold mb-4">Quick: Set Room</h3>
+            <h3 className="font-bold mb-4">Set Room</h3>
             <form onSubmit={handleSetRoom} className="flex gap-2">
               <input type="number" value={roomForm.bookingId} onChange={e => setRoomForm({...roomForm,bookingId:e.target.value})} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="B ID" required />
               <input value={roomForm.roomId} onChange={e => setRoomForm({...roomForm,roomId:e.target.value})} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Room ID" required />
               <input value={roomForm.roomPassword} onChange={e => setRoomForm({...roomForm,roomPassword:e.target.value})} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Pass" />
-              <Button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] hover:-translate-y-0.5 active:scale-90 transition-all">Set</Button>
+              <Button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#8b5cf6,#00d4ff)] hover:-translate-y-0.5 active:scale-90 transition-all">Set</Button>
             </form>
           </div>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-            <h3 className="font-bold mb-4">Quick: Add Tokens</h3>
+            <h3 className="font-bold mb-4">Add Tokens</h3>
             <form onSubmit={handleAddTokens} className="flex gap-2">
               <input value={tokenUser} onChange={e => setTokenUser(e.target.value)} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
               <input type="number" value={tokenAmount} onChange={e => setTokenAmount(e.target.value)} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Amount" required />
@@ -203,7 +199,7 @@ export default function AdminDashboard() {
             </form>
           </div>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
-            <h3 className="font-bold mb-4">Quick: Deduct Tokens</h3>
+            <h3 className="font-bold mb-4">Deduct Tokens</h3>
             <form onSubmit={handleDeductTokens} className="flex gap-2">
               <input value={deductUser} onChange={e => setDeductUser(e.target.value)} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
               <input type="number" value={deductAmount} onChange={e => setDeductAmount(e.target.value)} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="Amount" required />
@@ -275,14 +271,14 @@ export default function AdminDashboard() {
           </div>
           <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
             <table className="w-full">
-              <thead><tr>{['ID','Username','Email','Tokens','Role', isOwner ? 'Actions' : ''].filter(Boolean).map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
+              <thead><tr>{['ID','Username','Email','Tokens','Role','Actions'].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
               <tbody>{users.map(u => <tr key={u.id} className="border-b border-[rgba(255,255,255,0.06)]">
                 <td className="p-3 text-xs text-[#7777aa]">{u.id}</td>
                 <td className="p-3 text-sm font-semibold">{u.username} {u.role === 'owner' ? '👑' : ''}</td>
                 <td className="p-3 text-sm">{u.email}</td>
                 <td className="p-3 text-sm">{u.tokens ?? 0}</td>
                 <td className="p-3 text-sm capitalize"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${u.role === 'owner' ? 'text-[#8b5cf6] bg-[rgba(139,92,246,0.1)]' : u.role === 'admin' ? 'text-[#00d4ff] bg-[rgba(0,212,255,0.1)]' : 'text-[#7777aa] bg-[rgba(255,255,255,0.04)]'}`}>{u.role || 'player'}</span></td>
-                {isOwner && <td className="p-3">
+                <td className="p-3">
                   {u.role !== 'owner' && (
                     <div className="flex gap-1">
                       {u.role === 'admin' ? (
@@ -292,7 +288,7 @@ export default function AdminDashboard() {
                       )}
                     </div>
                   )}
-                </td>}
+                </td>
               </tr>)}</tbody>
             </table>
           </div>

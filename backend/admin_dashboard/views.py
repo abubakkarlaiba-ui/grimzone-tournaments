@@ -61,18 +61,61 @@ class AdminAddTokensView(APIView):
     def post(self, request):
         user_id = request.data.get('userId')
         amount = request.data.get('amount')
+        if user_id is None or amount is None:
+            return Response({'error': 'userId and amount are required'}, status=400)
         try:
             user = User.objects.get(pk=user_id)
             user.tokens += int(amount)
             user.save()
             return Response({'status': 'ok', 'tokens': user.tokens})
-        except User.DoesNotExist:
+        except (User.DoesNotExist, ValueError):
+            return Response({'error': 'User not found'}, status=404)
+
+class AdminDeductTokensView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        user_id = request.data.get('userId')
+        amount = request.data.get('amount')
+        if user_id is None or amount is None:
+            return Response({'error': 'userId and amount are required'}, status=400)
+        try:
+            user = User.objects.get(pk=user_id)
+            deduct = int(amount)
+            if deduct <= 0:
+                return Response({'error': 'Amount must be positive'}, status=400)
+            if user.tokens < deduct:
+                return Response({'error': f'User only has {user.tokens} tokens'}, status=400)
+            user.tokens -= deduct
+            user.save()
+            return Response({'status': 'ok', 'tokens': user.tokens})
+        except (User.DoesNotExist, ValueError):
             return Response({'error': 'User not found'}, status=404)
 
 class AdminBookingListView(generics.ListAPIView):
     queryset = Booking.objects.all().order_by('-created_at')
     serializer_class = BookingSerializer
     permission_classes = [permissions.IsAdminUser]
+
+class AdminUserRoleUpdateView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, pk):
+        role = request.data.get('role')
+        if role not in ['admin', 'player', 'owner']:
+            return Response({'error': 'Invalid role'}, status=400)
+        if role == 'owner' and request.user.role != 'owner':
+            return Response({'error': 'Only the owner can assign owner role'}, status=403)
+        try:
+            user = User.objects.get(pk=pk)
+            user.role = role
+            user.is_staff = (role in ['admin', 'owner'])
+            if role == 'owner':
+                user.is_superuser = True
+            user.save()
+            return Response({'status': 'ok', 'user': UserSerializer(user).data})
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
 
 class AdminRoomSetView(APIView):
     permission_classes = [permissions.IsAdminUser]
@@ -89,5 +132,22 @@ class AdminRoomSetView(APIView):
             return Response({'status': 'ok'})
         except Booking.DoesNotExist:
             return Response({'error': 'Booking not found'}, status=404)
+
+class AdminResetPasswordView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, pk):
+        if request.user.role != 'owner':
+            return Response({'error': 'Only owner can reset passwords'}, status=403)
+        new_password = request.data.get('password')
+        if not new_password or len(new_password) < 6:
+            return Response({'error': 'Password must be at least 6 characters'}, status=400)
+        try:
+            user = User.objects.get(pk=pk)
+            user.set_password(new_password)
+            user.save()
+            return Response({'status': 'ok'})
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
 
 

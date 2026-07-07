@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const defaultTournaments = [
-  { id:1, title:'Grand Battle Royale', type:'squad', prizePool:'2000 PKR', entryFee:25, totalSlots:12, slotsFilled:3, time:'5:15 PM' },
-  { id:2, title:'Squad Showdown', type:'squad', prizePool:'1000 PKR', entryFee:15, totalSlots:12, slotsFilled:5, time:'6:00 PM' },
-  { id:3, title:'Duo Rush', type:'duo', prizePool:'800 PKR', entryFee:10, totalSlots:25, slotsFilled:8, time:'7:30 PM' },
-  { id:4, title:'Solo Clash', type:'solo', prizePool:'500 PKR', entryFee:5, totalSlots:50, slotsFilled:10, time:'8:00 PM' },
+  { id:1, title:'Grand Battle Royale', type:'squad', prize_pool:'2000 PKR', entry_fee:25, total_slots:12, slots_filled:3, time:'5:15 PM' },
+  { id:2, title:'Squad Showdown', type:'squad', prize_pool:'1000 PKR', entry_fee:15, total_slots:12, slots_filled:5, time:'6:00 PM' },
+  { id:3, title:'Duo Rush', type:'duo', prize_pool:'800 PKR', entry_fee:10, total_slots:25, slots_filled:8, time:'7:30 PM' },
+  { id:4, title:'Solo Clash', type:'solo', prize_pool:'500 PKR', entry_fee:5, total_slots:50, slots_filled:10, time:'8:00 PM' },
 ];
 
 function calcBreakdown(entryFee, totalSlots) {
@@ -33,10 +33,10 @@ export default async function TournamentDetail({ params }) {
   const t = await getTournament(params.id);
   if (!t) return <div className="text-center py-20 text-[#7777aa]"><h2 className="text-xl font-bold text-white mb-2">Tournament not found</h2><Link href="/tournaments" className="text-[#00d4ff] hover:underline">← Back</Link></div>;
 
-  const fill = t.slotsFilled ?? 0;
-  const total = t.totalSlots ?? 10;
+  const fill = t.slots_filled ?? 0;
+  const total = t.total_slots ?? 10;
   const pct = Math.round((fill / total) * 100);
-  const bd = calcBreakdown(t.entryFee, total);
+  const bd = calcBreakdown(t.entry_fee, total);
   const typeColor = t.type === 'solo' ? '#00d4ff' : t.type === 'duo' ? '#8b5cf6' : '#ffd700';
 
   return (
@@ -58,11 +58,11 @@ export default async function TournamentDetail({ params }) {
         <div className="grid grid-cols-3 gap-4 my-6">
           <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-xl text-center">
             <div className="text-xs text-[#7777aa] uppercase font-semibold">Prize Pool</div>
-            <div className="text-xl font-extrabold text-white mt-1">{t.prizePool}</div>
+            <div className="text-xl font-extrabold text-white mt-1">{t.prize_pool}</div>
           </div>
           <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-xl text-center">
             <div className="text-xs text-[#7777aa] uppercase font-semibold">Entry Fee</div>
-            <div className="text-xl font-extrabold text-[#00d4ff] mt-1">{t.entryFee} FF</div>
+            <div className="text-xl font-extrabold text-[#00d4ff] mt-1">{t.entry_fee} FF</div>
           </div>
           <div className="bg-[rgba(255,255,255,0.03)] p-4 rounded-xl text-center">
             <div className="text-xs text-[#7777aa] uppercase font-semibold">Total Slots</div>
@@ -81,7 +81,7 @@ export default async function TournamentDetail({ params }) {
 
         <div className="space-y-3 mb-6">
           <div className="flex justify-between items-center py-2 px-4 rounded-lg bg-[rgba(255,255,255,0.03)]">
-            <span className="text-sm text-[#7777aa]">Entry Fee <span className="text-white">{t.entryFee} FF</span> × <span className="text-white">{total}</span> slots</span>
+            <span className="text-sm text-[#7777aa]">Entry Fee <span className="text-white">{t.entry_fee} FF</span> × <span className="text-white">{total}</span> slots</span>
             <span className="text-sm font-bold text-white">{bd.totalCollection.toFixed(0)} FF</span>
           </div>
           <div className="flex justify-between items-center py-2 px-4 rounded-lg bg-[rgba(255,255,255,0.03)]">

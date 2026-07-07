@@ -60,14 +60,18 @@ export const api = {
     return data;
   },
 
-  async register(username, email, password) {
-    const data = await this.request('POST', '/auth/register/', { username, email, password });
+  async register(username, email, password, freefire_name) {
+    const data = await this.request('POST', '/auth/register/', { username, email, password, freefire_name });
     this.token = data.token;
     this.user = data.user;
     localStorage.setItem('gz_token', data.token);
     localStorage.setItem('gz_user', JSON.stringify(data.user));
     notify();
     return data;
+  },
+
+  async getUserStats() {
+    return this.request('GET', '/auth/stats/');
   },
 
   logout() {
@@ -80,7 +84,8 @@ export const api = {
   },
 
   isLoggedIn() { return !!this.token; },
-  isAdmin() { return this.user?.role === 'admin'; },
+  isAdmin() { return this.user?.role === 'admin' || this.user?.role === 'owner'; },
+  isOwner() { return this.user?.role === 'owner'; },
 
   getTournaments() { return this.request('GET', '/tournaments/'); },
   createTournament(data) { return this.request('POST', '/tournaments/', data); },
@@ -89,16 +94,23 @@ export const api = {
 
   getWallet() { return this.request('GET', '/wallet/'); },
   getBookings() { return this.request('GET', '/bookings/'); },
-  createBooking(data) { return this.request('POST', '/bookings/', data); },
+  async createBooking(data) { const d = await this.request('POST', '/bookings/', data); notify(); return d; },
   submitPayment(formData) { return this.upload('/payments/', formData); },
 
   getPayments() { return this.request('GET', '/admin/payments/'); },
-  verifyPayment(id, action) { return this.request('POST', `/admin/payments/${id}/`, { action }); },
+  verifyPayment(id, action) { return this.request('POST', `/admin/payments/${id}/verify/`, { action }); },
   getUsers() { return this.request('GET', '/admin/users/'); },
-  addTokens(userId, amount) { return this.request('POST', '/admin/tokens/', { userId, amount }); },
+  updateUserRole(userId, role) { return this.request('POST', `/admin/users/${userId}/role/`, { role }); },
+  async addTokens(userId, amount) { const d = await this.request('POST', '/admin/tokens/', { userId, amount }); notify(); return d; },
+  async deductTokens(userId, amount) { const d = await this.request('POST', '/admin/tokens/deduct/', { userId, amount }); notify(); return d; },
   getAdminStats() { return this.request('GET', '/admin/stats/'); },
   getAdminBookings() { return this.request('GET', '/admin/bookings/'); },
   setRoomId(bookingId, roomId, roomPassword) { return this.request('POST', '/admin/set-room/', { bookingId, roomId, roomPassword }); },
+
+  getMyTeams() { return this.request('GET', '/teams/'); },
+  async createTeam(tournament_title) { const d = await this.request('POST', '/teams/create/', { tournament_title }); notify(); return d; },
+  async joinTeam(code) { const d = await this.request('POST', '/teams/join/', { code }); notify(); return d; },
+  getTeam(code) { return this.request('GET', `/teams/${code}/`); },
 };
 
 api.init();

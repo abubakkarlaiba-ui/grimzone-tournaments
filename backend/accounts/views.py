@@ -43,3 +43,20 @@ class MeView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+class UserStatsView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        from bookings.models import Booking
+        tournaments_played = Booking.objects.filter(user=user).count()
+        serializer = self.get_serializer(user)
+        return Response({
+            **serializer.data,
+            'tournaments_played': tournaments_played,
+        })
