@@ -21,20 +21,19 @@ export default function AccountPage() {
 
   if (loading) return (
     <div className="max-w-xl mx-auto my-10 px-5">
-      <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center text-[#7777aa]">Loading...</div>
+      <div className="glass p-8 text-center">Loading...</div>
     </div>
   );
 
   if (!stats) return (
     <div className="max-w-xl mx-auto my-10 px-5">
-      <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center text-[#e74c3c]">Failed to load account data.</div>
+      <div className="glass p-8 text-center text-[#e74c3c]">Failed to load account data.</div>
     </div>
   );
 
   return (
     <div className="max-w-xl mx-auto my-10 px-5">
-      <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,#00d4ff,#8b5cf6,#00d4ff)]" />
+      <div className="glass p-8 gradient-border relative overflow-hidden">
         <h2 className="text-2xl font-extrabold mb-1">My Account</h2>
         <p className="text-sm text-[#7777aa] mb-6">Your GrimZone profile and stats.</p>
 

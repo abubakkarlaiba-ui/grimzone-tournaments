@@ -6,7 +6,7 @@ export default function ContactPage() {
         <p className="text-[#7777aa]">Get in touch via WhatsApp or email</p>
       </div>
       <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center transition-all hover:border-[rgba(0,212,255,0.15)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] relative overflow-hidden group">
+        <div className="glass glass-hover p-8 text-center relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#00d4ff,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="text-4xl mb-3">💬</div>
           <h3 className="text-lg font-bold mb-2">WhatsApp Support</h3>
@@ -15,7 +15,7 @@ export default function ContactPage() {
             Chat on WhatsApp
           </a>
         </div>
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-8 text-center transition-all hover:border-[rgba(0,212,255,0.15)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] relative overflow-hidden group">
+        <div className="glass glass-hover p-8 text-center relative overflow-hidden group">
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#8b5cf6,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="text-4xl mb-3">📧</div>
           <h3 className="text-lg font-bold mb-2">Email Support</h3>

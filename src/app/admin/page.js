@@ -146,7 +146,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {statsCards.map((s, i) => (
-          <div key={i} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 text-center">
+          <div key={i} className="glass p-6 text-center">
             <div className="text-3xl mb-2">{s.icon}</div>
             <div className="text-2xl font-black text-white">{s.value}</div>
             <div className="text-xs text-[#7777aa] mt-1 font-semibold">{s.label}</div>
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
 
       {tab === 'overview' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+          <div className="glass p-6">
             <h3 className="font-bold mb-4">Recent Tournaments</h3>
             {tournaments.slice(0, 4).map((t) => (
               <div key={t.id} className="flex justify-between items-center py-2 border-b border-[rgba(255,255,255,0.06)] last:border-0">
@@ -172,7 +172,7 @@ export default function AdminDashboard() {
               </div>
             ))}
           </div>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+          <div className="glass p-6">
             <h3 className="font-bold mb-4">Pending Payments</h3>
             {payments.filter(p => p.status === 'pending').slice(0, 4).map((p) => (
               <div key={p.id} className="flex justify-between items-center py-2 border-b border-[rgba(255,255,255,0.06)] last:border-0">
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
             ))}
             {payments.filter(p => p.status === 'pending').length === 0 && <p className="text-sm text-[#7777aa]">None pending.</p>}
           </div>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+          <div className="glass p-6">
             <h3 className="font-bold mb-4">Quick: Set Room</h3>
             <form onSubmit={handleSetRoom} className="flex gap-2">
               <input type="number" value={roomForm.bookingId} onChange={e => setRoomForm({...roomForm,bookingId:e.target.value})} className="w-20 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="B ID" required />
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
               <Button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] hover:-translate-y-0.5 active:scale-90 transition-all">Set</Button>
             </form>
           </div>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+          <div className="glass p-6">
             <h3 className="font-bold mb-4">Quick: Add Tokens</h3>
             <form onSubmit={handleAddTokens} className="flex gap-2">
               <input value={tokenUser} onChange={e => setTokenUser(e.target.value)} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
               <Button type="submit" className="px-3 py-2 rounded-lg text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 hover:-translate-y-0.5 active:scale-90 transition-all">Add</Button>
             </form>
           </div>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+          <div className="glass p-6">
             <h3 className="font-bold mb-4">Quick: Deduct Tokens</h3>
             <form onSubmit={handleDeductTokens} className="flex gap-2">
               <input value={deductUser} onChange={e => setDeductUser(e.target.value)} className="flex-1 p-2 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-xs focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
 
       {tab === 'tournaments' && (
         <div>
-          <form onSubmit={createTournament} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 mb-6">
+          <form onSubmit={createTournament} className="glass p-6 mb-6 gradient-border">
             <h3 className="font-bold mb-4">Create Tournament</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
               <input value={form.title} onChange={e => setForm({...form,title:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Title" required />
@@ -226,7 +226,7 @@ export default function AdminDashboard() {
             </div>
             <Button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#2ecc71,#27ae60)] hover:brightness-110 hover:-translate-y-0.5 active:scale-95 transition-all">Create</Button>
           </form>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
+          <div className="glass overflow-hidden">
             <table className="w-full">
               <thead><tr>{['ID','Title','Type','Prize','Slots','',''].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
               <tbody>{tournaments.map(t => <tr key={t.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-xs text-[#7777aa]">{t.id}</td><td className="p-3 text-sm font-semibold">{t.title}</td><td className="p-3 text-sm capitalize">{t.type}</td><td className="p-3 text-sm">{t.prize_pool}</td><td className="p-3 text-sm">{(t.slots_filled ?? 0)}/{t.total_slots ?? 10}</td><td className="p-3"><a href={`/tournaments/${t.id}`} className="text-[#00d4ff] text-xs hover:underline">View</a></td><td className="p-3"><Button onClick={() => deleteTournament(t.id)} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 active:scale-90 transition-all">Delete</Button></td></tr>)}</tbody>
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
       )}
 
       {tab === 'payments' && (
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
+        <div className="glass overflow-hidden">
           <table className="w-full">
             <thead><tr>{['User','Amount','Status',''].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
             <tbody>{payments.length === 0 ? <tr><td colSpan="4" className="p-8 text-center text-[#7777aa] text-sm">No payments.</td></tr> : payments.map(p => <tr key={p.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-sm">{p.user?.username || p.userId}</td><td className="p-3 text-sm">{p.amount}</td><td className="p-3 text-sm"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${p.status === 'verified' ? 'text-[#2ecc71] bg-[rgba(46,204,113,0.1)]' : p.status === 'rejected' ? 'text-[#e74c3c] bg-[rgba(231,76,60,0.1)]' : 'text-[#f1c40f] bg-[rgba(241,196,15,0.1)]'}`}>{p.status || 'pending'}</span></td><td className="p-3">{p.status !== 'verified' && p.status !== 'rejected' && <div className="flex gap-1"><Button onClick={() => handleVerify(p.id,'verify')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 active:scale-90 transition-all">Verify</Button><Button onClick={() => handleVerify(p.id,'reject')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 active:scale-90 transition-all">Reject</Button></div>}</td></tr>)}</tbody>
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
       )}
 
       {tab === 'bookings' && (
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
+        <div className="glass overflow-hidden">
           <table className="w-full">
             <thead><tr>{['ID','Player','Tournament','Room ID','Status'].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
             <tbody>{bookings.length === 0 ? <tr><td colSpan="5" className="p-8 text-center text-[#7777aa] text-sm">No bookings.</td></tr> : bookings.map(b => <tr key={b.id} className="border-b border-[rgba(255,255,255,0.06)]"><td className="p-3 text-xs text-[#7777aa]">{b.id}</td><td className="p-3 text-sm font-semibold">{b.user?.username || b.userId}</td><td className="p-3 text-sm">{b.tournamentTitle || '-'}</td><td className="p-3 text-sm">{b.roomId || <span className="text-[#f1c40f] text-xs">Not set</span>}</td><td className="p-3 text-sm"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${b.roomId ? 'text-[#2ecc71] bg-[rgba(46,204,113,0.1)]' : 'text-[#f1c40f] bg-[rgba(241,196,15,0.1)]'}`}>{b.roomId ? 'Ready' : 'Pending'}</span></td></tr>)}</tbody>
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
       {tab === 'users' && (
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <form onSubmit={handleAddTokens} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+            <form onSubmit={handleAddTokens} className="glass p-6">
               <h3 className="font-bold mb-4">Add Tokens</h3>
               <div className="flex gap-3">
                 <input value={tokenUser} onChange={e => setTokenUser(e.target.value)} className="flex-1 p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
                 <Button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[#2ecc71] hover:brightness-110 hover:-translate-y-0.5 active:scale-95 transition-all">Add</Button>
               </div>
             </form>
-            <form onSubmit={handleDeductTokens} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6">
+            <form onSubmit={handleDeductTokens} className="glass p-6">
               <h3 className="font-bold mb-4">Deduct Tokens</h3>
               <div className="flex gap-3">
                 <input value={deductUser} onChange={e => setDeductUser(e.target.value)} className="flex-1 p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="User ID" required />
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
               </div>
             </form>
           </div>
-          <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl overflow-hidden">
+          <div className="glass overflow-hidden">
             <table className="w-full">
               <thead><tr>{['ID','Username','Email','Tokens','Role', isOwner ? 'Actions' : ''].filter(Boolean).map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
               <tbody>{users.map(u => <tr key={u.id} className="border-b border-[rgba(255,255,255,0.06)]">

@@ -17,7 +17,7 @@ export default function RulesPage() {
       </div>
       <div className="space-y-3">
         {rules.map(r => (
-          <div key={r.num} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-5 flex gap-4 items-start transition-all hover:border-[rgba(0,212,255,0.1)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+          <div key={r.num} className="glass glass-hover p-5 flex gap-4 items-start">
             <div className="w-9 h-9 rounded-full bg-[linear-gradient(135deg,rgba(0,212,255,0.12),rgba(139,92,246,0.08))] text-[#00d4ff] flex items-center justify-center font-extrabold text-sm flex-shrink-0 border border-[rgba(0,212,255,0.15)]">
               {r.num}
             </div>

@@ -6,9 +6,13 @@
   --color-bg-tertiary: #1a1a33;
   --color-accent: #00d4ff;
   --color-accent-purple: #8b5cf6;
+  --color-accent-gold: #ffd700;
   --color-text-primary: #e0e0f0;
   --color-text-secondary: #7777aa;
+  --color-text-muted: #555588;
   --color-border: rgba(255,255,255,0.06);
+  --color-border-hover: rgba(255,255,255,0.1);
+  --color-glass: rgba(17,17,34,0.7);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -50,4 +54,100 @@ body {
   animation: spin 0.6s linear infinite;
   display: inline-block;
   vertical-align: middle;
+}
+
+@keyframes heroPulse {
+  0%,100% { transform: scale(1); opacity: 0.6 }
+  50% { transform: scale(1.05); opacity: 1 }
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glass {
+  background: rgba(17,17,34,0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+
+.glass-hover {
+  transition: all 0.2s ease;
+}
+
+.glass-hover:hover {
+  border-color: rgba(0,212,255,0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00d4ff, #8b5cf6, #00d4ff);
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: white;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #00d4ff;
+  box-shadow: 0 0 16px rgba(0,212,255,0.1);
+}
+
+.input-field::placeholder {
+  color: #555588;
+}
+
+select.input-field option {
+  background: #111122;
+  color: white;
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  box-shadow: 0 0 16px rgba(0,212,255,0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-gradient:hover:not(:disabled) {
+  box-shadow: 0 0 30px rgba(0,212,255,0.4);
+  transform: translateY(-2px);
+}
+
+.btn-gradient:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-gradient:disabled {
+  opacity: 0.5;
 }

@@ -48,7 +48,7 @@ function TournamentCard({ t }) {
   const pct = Math.round((fill / total) * 100);
   const typeColor = t.type === 'solo' ? '#00d4ff' : t.type === 'duo' ? '#8b5cf6' : '#ffd700';
   return (
-    <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 transition-all hover:border-[rgba(0,212,255,0.15)] hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] relative overflow-hidden group">
+    <div className="glass glass-hover p-6 relative overflow-hidden group">
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#00d4ff,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-bold">{t.title}</h3>

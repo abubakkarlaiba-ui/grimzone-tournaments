@@ -43,18 +43,17 @@ function BookingForm() {
         <span className="h-0.5 bg-[linear-gradient(90deg,#00d4ff,#8b5cf6)] rounded-full mt-1.5" style={{width:'60px'}} />
       </div>
       <p className="text-[#7777aa] mb-8">Select a solo tournament and book your slot. For duo &amp; squad tournaments, <a href="/teams" className="text-[#00d4ff] font-semibold hover:underline">create or join a team</a>.</p>
-      <form onSubmit={handleSubmit} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,#00d4ff,#8b5cf6,#00d4ff)]" />
+      <form onSubmit={handleSubmit} className="glass p-6 gradient-border relative overflow-hidden">
         <div className="mb-5">
           <label className="block text-sm font-semibold text-[#7777aa] mb-1.5">Select Solo Tournament</label>
-          <select value={selected} onChange={e => setSelected(e.target.value)} className="w-full p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" required>
+          <select value={selected} onChange={e => setSelected(e.target.value)} className="input-field" required>
             <option value="">Choose a tournament...</option>
             {soloTournaments.map((t, i) => (
               <option key={i} value={t.title}>{t.title} - {t.entry_fee} FF</option>
             ))}
           </select>
         </div>
-        <Button type="submit" disabled={loading || !selected} className="w-full py-3 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_16px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:-translate-y-0.5 disabled:opacity-50 active:scale-[0.98]">
+        <Button type="submit" disabled={loading || !selected} className="btn-gradient w-full py-3">
           {loading ? <span className="btn-spinner" /> : 'Confirm Booking'}
         </Button>
         {msg && (

@@ -35,13 +35,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[rgba(10,10,15,0.95)] backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]">
+    <nav className="sticky top-0 z-50 bg-[rgba(10,10,15,0.85)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]">
       <div className="max-w-6xl mx-auto px-5 flex items-center h-16">
         <Link href="/" className="text-white font-black text-xl flex items-center gap-2.5" style={{textShadow:'0 0 20px rgba(0,212,255,0.3)'}}>
           <span className="text-xl">⚔️</span> GrimZone Tournaments
         </Link>
 
-        <div className="hidden md:flex items-center gap-1 ml-auto">
+        <div className="hidden md:flex items-center gap-1 ml-auto mr-2">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/tournaments">Tournaments</NavLink>
           <NavLink href="/rules">Rules</NavLink>

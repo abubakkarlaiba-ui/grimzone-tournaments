@@ -106,8 +106,7 @@ export default function TeamsPage() {
       </div>
 
       {tab === 'create' && (
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,#8b5cf6,#00d4ff,#8b5cf6)]" />
+        <div className="glass p-6 gradient-border relative overflow-hidden" style={{'--gradient-from': '#8b5cf6', '--gradient-to': '#00d4ff'}}>
           {!createdTeam ? (
             <form onSubmit={handleCreateTeam}>
               <div className="mb-5">
@@ -158,8 +157,7 @@ export default function TeamsPage() {
       )}
 
       {tab === 'join' && (
-        <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,#00d4ff,#8b5cf6,#00d4ff)]" />
+        <div className="glass p-6 gradient-border relative overflow-hidden">
           {!lookedUpTeam ? (
             <form onSubmit={handleLookupTeam}>
               <div className="mb-5">

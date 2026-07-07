@@ -20,28 +20,27 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden text-center px-5 py-24 bg-[linear-gradient(135deg,#0a0a0f_0%,#0d0a1a_40%,#0a1220_70%,#0a0a0f_100%)]">
+      <section className="relative overflow-hidden text-center px-5 py-28 bg-[linear-gradient(135deg,#0a0a0f_0%,#0d0a1a_40%,#0a1220_70%,#0a0a0f_100%)]">
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 50%, rgba(139,92,246,0.06) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse at 25% 50%, rgba(0,212,255,0.1) 0%, transparent 55%), radial-gradient(ellipse at 75% 50%, rgba(139,92,246,0.08) 0%, transparent 55%)',
           animation: 'heroPulse 6s ease-in-out infinite',
         }} />
-        <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(0,212,255,0.03)' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)'/%3E%3C/svg%3E")`,
+        <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(0,212,255,0.04)' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)'/%3E%3C/svg%3E")`,
         }} />
-        <style>{`@keyframes heroPulse { 0%,100% { transform:scale(1); opacity:0.6 } 50% { transform:scale(1.05); opacity:1 } }`}</style>
 
         <div className="relative z-10 max-w-2xl mx-auto">
           <span className="inline-block bg-[linear-gradient(135deg,rgba(0,212,255,0.12),rgba(139,92,246,0.08))] text-[#00d4ff] px-5 py-1.5 rounded-full text-xs font-bold mb-5 border border-[rgba(0,212,255,0.2)] uppercase tracking-wider">
             #1 Free Fire Tournament Platform
           </span>
-          <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4 text-transparent bg-clip-text bg-[linear-gradient(135deg,#fff_30%,#00d4ff_70%,#8b5cf6)]">
+          <h1 className="text-5xl md:text-6xl font-black leading-tight mb-4 text-transparent bg-clip-text bg-[linear-gradient(135deg,#fff_30%,#00d4ff_70%,#8b5cf6)]">
             Dominate the Battlefield
           </h1>
-          <p className="text-[#7777aa] text-lg leading-relaxed mb-9 max-w-lg mx-auto">
+          <p className="text-[#7777aa] text-lg leading-relaxed mb-10 max-w-lg mx-auto">
             Compete in Free Fire tournaments, earn tokens, and win real prizes. Join thousands of players on GrimZone.
           </p>
           <div className="flex gap-3.5 justify-center flex-wrap">
-            <Link href="/tournaments" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1 active:scale-95">
+            <Link href="/tournaments" className="btn-gradient inline-flex items-center gap-2 px-8 py-3.5 shadow-[0_0_24px_rgba(0,212,255,0.2)] hover:shadow-[0_0_40px_rgba(0,212,255,0.4)]">
               Browse Tournaments
             </Link>
             <Link href="/register" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] backdrop-blur-sm transition-all hover:border-[#00d4ff] hover:text-[#00d4ff] hover:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:-translate-y-1 active:scale-95">
@@ -59,7 +58,7 @@ export default async function HomePage() {
             { icon: '💰', number: '50K+', label: 'Prizes Awarded' },
             { icon: '⭐', number: '4.9', label: 'Player Rating' },
           ].map((s, i) => (
-            <div key={i} className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 text-center transition-all hover:border-[rgba(0,212,255,0.12)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] relative overflow-hidden group">
+            <div key={i} className="glass glass-hover p-6 text-center relative overflow-hidden group">
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#00d4ff,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="text-3xl mb-2">{s.icon}</div>
               <div className="text-2xl font-black text-white">{s.number}</div>
@@ -98,7 +97,7 @@ function TournamentCard({ tournament }) {
   const typeColor = tournament.type === 'solo' ? '#00d4ff' : tournament.type === 'duo' ? '#8b5cf6' : '#ffd700';
 
   return (
-    <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 transition-all hover:border-[rgba(0,212,255,0.15)] hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] relative overflow-hidden group">
+    <div className="glass glass-hover p-6 relative overflow-hidden group">
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#00d4ff,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-bold">{tournament.title}</h3>

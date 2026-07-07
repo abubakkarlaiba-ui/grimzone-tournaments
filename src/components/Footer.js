@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#111122] border-t border-[rgba(255,255,255,0.06)] px-5 py-10 mt-16">
+    <footer className="glass border-t-0 px-5 py-10 mt-16 rounded-none">
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         <div>
           <h3 className="text-[#00d4ff] font-extrabold text-lg mb-3" style={{textShadow:'0 0 12px rgba(0,212,255,0.2)'}}>⚔️ GrimZone Tournaments</h3>

@@ -43,7 +43,7 @@ export default async function TournamentDetail({ params }) {
     <div className="max-w-4xl mx-auto px-5 py-12">
       <Link href="/tournaments" className="text-sm text-[#7777aa] hover:text-[#00d4ff] transition-colors mb-6 inline-block">← Back to Tournaments</Link>
 
-      <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-2xl p-8 mb-8">
+      <div className="glass rounded-2xl p-8 mb-8 gradient-border">
         <div className="flex justify-between items-start mb-4">
           <div>
             <span className="text-xs font-bold px-3 py-1 rounded uppercase tracking-wide" style={{background:`${typeColor}15`,color:typeColor,border:`1px solid ${typeColor}20`}}>{t.type}</span>
@@ -76,7 +76,7 @@ export default async function TournamentDetail({ params }) {
         <div className="flex justify-between text-sm text-[#7777aa] font-semibold"><span>{fill}/{total} slots filled</span><span>{pct}%</span></div>
       </div>
 
-      <div className="bg-[#111122] border border-[rgba(255,255,255,0.06)] rounded-2xl p-8">
+      <div className="glass rounded-2xl p-8">
         <h2 className="text-xl font-black mb-6">Prize Breakdown</h2>
 
         <div className="space-y-3 mb-6">
