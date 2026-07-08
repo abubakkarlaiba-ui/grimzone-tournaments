@@ -106,6 +106,9 @@ export const api = {
   getAdminStats() { return this.request('GET', '/admin/stats/'); },
   getAdminBookings() { return this.request('GET', '/admin/bookings/'); },
   setRoomId(bookingId, roomId, roomPassword) { return this.request('POST', '/admin/set-room/', { bookingId, roomId, roomPassword }); },
+  setTournamentRoom(id, room_id, room_password) { return this.request('POST', `/tournaments/${id}/set-room/`, { room_id, room_password }); },
+
+  getUserBookings() { return this.request('GET', '/bookings/'); },
 
   getMyTeams() { return this.request('GET', '/teams/'); },
   async createTeam(tournament_title) { const d = await this.request('POST', '/teams/create/', { tournament_title }); notify(); return d; },

@@ -14,7 +14,7 @@ export default function OwnerDashboard() {
   const [msgError, setMsgError] = useState(false);
   function showMsg(m, isError) { setMsg(m); setMsgError(!!isError); }
   const [tab, setTab] = useState('overview');
-  const [form, setForm] = useState({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: '' });
+  const [form, setForm] = useState({ title: '', type: 'solo', prizePool: '', startTime: '', entryFee: '', totalSlots: '' });
   const [tokenUser, setTokenUser] = useState('');
   const [tokenAmount, setTokenAmount] = useState('');
   const [deductUser, setDeductUser] = useState('');
@@ -49,11 +49,12 @@ export default function OwnerDashboard() {
         title: form.title,
         type: form.type,
         prize_pool: form.prizePool,
+        start_time: form.startTime || null,
         entry_fee: parseInt(form.entryFee) || 0,
         total_slots: parseInt(form.totalSlots) || 10,
       });
       showMsg('Tournament created!');
-      setForm({ title: '', type: 'solo', prizePool: '', entryFee: '', totalSlots: '' });
+      setForm({ title: '', type: 'solo', prizePool: '', startTime: '', entryFee: '', totalSlots: '' });
       setTournaments(await api.getTournaments());
       setStats(await api.getAdminStats());
     } catch (err) { showMsg('Error: ' + err.message, true); }
@@ -213,12 +214,13 @@ export default function OwnerDashboard() {
         <div>
           <form onSubmit={createTournament} className="glass p-6 mb-6 gradient-border">
             <h3 className="font-bold mb-4">Create Tournament</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-              <input value={form.title} onChange={e => setForm({...form,title:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Title" required />
-              <select value={form.type} onChange={e => setForm({...form,type:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff)]"><option value="solo">Solo</option><option value="duo">Duo</option><option value="squad">Squad</option></select>
-              <input value={form.prizePool} onChange={e => setForm({...form,prizePool:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Prize Pool" required />
-              <input type="number" value={form.entryFee} onChange={e => setForm({...form,entryFee:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Entry Fee" required />
-              <input type="number" value={form.totalSlots} onChange={e => setForm({...form,totalSlots:e.target.value})} className="p-3 rounded-lg bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.06)] text-white text-sm focus:outline-none focus:border-[#00d4ff]" placeholder="Total Slots" />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+              <input value={form.title} onChange={e => setForm({...form,title:e.target.value})} className="input-field" placeholder="Title" required />
+              <select value={form.type} onChange={e => setForm({...form,type:e.target.value})} className="input-field"><option value="solo">Solo</option><option value="duo">Duo</option><option value="squad">Squad</option></select>
+              <input value={form.prizePool} onChange={e => setForm({...form,prizePool:e.target.value})} className="input-field" placeholder="Prize Pool" required />
+              <input type="datetime-local" value={form.startTime} onChange={e => setForm({...form,startTime:e.target.value})} className="input-field" />
+              <input type="number" value={form.entryFee} onChange={e => setForm({...form,entryFee:e.target.value})} className="input-field" placeholder="Entry Fee" required />
+              <input type="number" value={form.totalSlots} onChange={e => setForm({...form,totalSlots:e.target.value})} className="input-field" placeholder="Total Slots" />
             </div>
             <Button type="submit" className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-[linear-gradient(135deg,#2ecc71,#27ae60)] hover:brightness-110 hover:-translate-y-0.5 active:scale-95 transition-all">Create</Button>
           </form>

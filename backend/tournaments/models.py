@@ -9,6 +9,9 @@ class Tournament(models.Model):
     total_slots = models.PositiveIntegerField(default=10)
     slots_filled = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=20, default='upcoming')
+    start_time = models.DateTimeField(null=True, blank=True)
+    room_id = models.CharField(max_length=50, blank=True, default='')
+    room_password = models.CharField(max_length=50, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
