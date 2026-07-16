@@ -2,7 +2,6 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-import pusher
 from django.conf import settings
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
@@ -13,13 +12,17 @@ from accounts.serializers import UserSerializer
 
 User = get_user_model()
 
-pusher_client = pusher.Pusher(
-    app_id=settings.PUSHER_APP_ID,
-    key=settings.PUSHER_KEY,
-    secret=settings.PUSHER_SECRET,
-    cluster=settings.PUSHER_CLUSTER,
-    ssl=True,
-)
+try:
+    import pusher
+    pusher_client = pusher.Pusher(
+        app_id=settings.PUSHER_APP_ID,
+        key=settings.PUSHER_KEY,
+        secret=settings.PUSHER_SECRET,
+        cluster=settings.PUSHER_CLUSTER,
+        ssl=True,
+    )
+except Exception:
+    pusher_client = None
 
 class AdminStatsView(APIView):
     permission_classes = [permissions.IsAdminUser]
@@ -140,20 +143,21 @@ class AdminRoomSetView(APIView):
             booking.room_password = room_password
             booking.save()
 
-            try:
-                pusher_client.trigger('admin-rooms', 'booking-room-updated', {
-                    'booking_id': booking.id,
-                    'room_id': room_id,
-                    'room_password': room_password,
-                })
-                tournament = Tournament.objects.filter(title=booking.tournament_title).first()
-                if tournament:
-                    pusher_client.trigger(f'tournament-{tournament.id}', 'room-updated', {
+            if pusher_client:
+                try:
+                    pusher_client.trigger('admin-rooms', 'booking-room-updated', {
+                        'booking_id': booking.id,
                         'room_id': room_id,
                         'room_password': room_password,
                     })
-            except Exception:
-                pass
+                    tournament = Tournament.objects.filter(title=booking.tournament_title).first()
+                    if tournament:
+                        pusher_client.trigger(f'tournament-{tournament.id}', 'room-updated', {
+                            'room_id': room_id,
+                            'room_password': room_password,
+                        })
+                except Exception:
+                    pass
 
             return Response({'status': 'ok'})
         except Booking.DoesNotExist:

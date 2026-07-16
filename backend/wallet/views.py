@@ -2,18 +2,21 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-import pusher
 from django.conf import settings
 
 User = get_user_model()
 
-pusher_client = pusher.Pusher(
-    app_id=settings.PUSHER_APP_ID,
-    key=settings.PUSHER_KEY,
-    secret=settings.PUSHER_SECRET,
-    cluster=settings.PUSHER_CLUSTER,
-    ssl=True,
-)
+try:
+    import pusher
+    pusher_client = pusher.Pusher(
+        app_id=settings.PUSHER_APP_ID,
+        key=settings.PUSHER_KEY,
+        secret=settings.PUSHER_SECRET,
+        cluster=settings.PUSHER_CLUSTER,
+        ssl=True,
+    )
+except Exception:
+    pusher_client = None
 
 class WalletView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -51,17 +54,18 @@ class TransferTokensView(APIView):
         recipient.tokens += amount
         recipient.save()
 
-        try:
-            pusher_client.trigger(f'user-{recipient.id}', 'tokens-updated', {
-                'user_id': recipient.id,
-                'balance': recipient.tokens,
-            })
-            pusher_client.trigger(f'user-{sender.id}', 'tokens-updated', {
-                'user_id': sender.id,
-                'balance': sender.tokens,
-            })
-        except Exception:
-            pass
+        if pusher_client:
+            try:
+                pusher_client.trigger(f'user-{recipient.id}', 'tokens-updated', {
+                    'user_id': recipient.id,
+                    'balance': recipient.tokens,
+                })
+                pusher_client.trigger(f'user-{sender.id}', 'tokens-updated', {
+                    'user_id': sender.id,
+                    'balance': sender.tokens,
+                })
+            except Exception:
+                pass
 
         return Response({
             'status': 'ok',
