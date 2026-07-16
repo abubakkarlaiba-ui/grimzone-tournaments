@@ -1,8 +1,18 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import pusher
+from django.conf import settings
 from .models import Tournament
 from .serializers import TournamentSerializer
+
+pusher_client = pusher.Pusher(
+    app_id=settings.PUSHER_APP_ID,
+    key=settings.PUSHER_KEY,
+    secret=settings.PUSHER_SECRET,
+    cluster=settings.PUSHER_CLUSTER,
+    ssl=True,
+)
 
 class IsCreatorOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -76,6 +86,15 @@ class TournamentSetRoomView(APIView):
         tournament.room_id = room_id
         tournament.room_password = room_password
         tournament.save()
+
+        try:
+            pusher_client.trigger(f'tournament-{tournament.id}', 'room-updated', {
+                'room_id': room_id,
+                'room_password': room_password,
+            })
+        except Exception:
+            pass
+
         return Response({
             'status': 'ok',
             'room_id': room_id,

@@ -1,7 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Pusher from 'pusher-js';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
+
+const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY || '';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState(null);
@@ -31,6 +34,17 @@ export default function AdminDashboard() {
     api.getPayments().then(setPayments).catch(() => {});
     api.getAdminBookings().then(setBookings).catch(() => {});
     api.getUsers().then(setUsers).catch(() => {});
+
+    if (PUSHER_KEY) {
+      const pusher = new Pusher(PUSHER_KEY, { cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || 'us2' });
+      const channel = pusher.subscribe('admin-rooms');
+      channel.bind('booking-room-updated', () => { api.getAdminBookings().then(setBookings).catch(() => {}); });
+      return () => {
+        channel.unbind_all();
+        pusher.unsubscribe('admin-rooms');
+        pusher.disconnect();
+      };
+    }
   }, []);
 
   if (!user) return <div className="text-center py-20 text-[#7777aa]">Loading...</div>;

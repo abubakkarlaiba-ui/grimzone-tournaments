@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Pusher from 'pusher-js';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
+
+const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY || '';
 
 function calcBreakdown(entryFee, totalSlots, actualPrizeStr) {
   const total = entryFee * totalSlots;
@@ -93,6 +96,21 @@ export default function TournamentDetail() {
 
     if (api.isLoggedIn()) {
       api.getUserBookings().then(setBookings).catch(() => {});
+    }
+
+    if (PUSHER_KEY) {
+      const pusher = new Pusher(PUSHER_KEY, { cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || 'us2' });
+      const channel = pusher.subscribe(`tournament-${params.id}`);
+      channel.bind('room-updated', (data) => {
+        setT(prev => prev ? { ...prev, room_id: data.room_id, room_password: data.room_password } : prev);
+        setRoomId(data.room_id || '');
+        setRoomPass(data.room_password || '');
+      });
+      return () => {
+        channel.unbind_all();
+        pusher.unsubscribe(`tournament-${params.id}`);
+        pusher.disconnect();
+      };
     }
   }, []);
 
