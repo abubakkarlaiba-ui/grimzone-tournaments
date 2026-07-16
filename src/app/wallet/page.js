@@ -1,13 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Pusher from 'pusher-js';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
+
+const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY || '';
 
 export default function WalletPage() {
   const [balance, setBalance] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
   const [selected, setSelected] = useState(null);
   const [msg, setMsg] = useState('');
+  const [sendUsername, setSendUsername] = useState('');
+  const [sendAmount, setSendAmount] = useState('');
+  const [sendMsg, setSendMsg] = useState('');
 
   function fetchWallet() {
     setLoggedIn(api.isLoggedIn());
@@ -18,7 +24,19 @@ export default function WalletPage() {
 
   useEffect(() => {
     fetchWallet();
-    return api.subscribe(fetchWallet);
+    const unsub = api.subscribe(fetchWallet);
+    if (PUSHER_KEY && api.isLoggedIn() && api.user) {
+      const pusher = new Pusher(PUSHER_KEY, { cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || 'us2' });
+      const channel = pusher.subscribe(`user-${api.user.id}`);
+      channel.bind('tokens-updated', () => { fetchWallet(); });
+      return () => {
+        channel.unbind_all();
+        pusher.unsubscribe(`user-${api.user.id}`);
+        pusher.disconnect();
+        unsub();
+      };
+    }
+    return unsub;
   }, []);
 
   const packages = [
@@ -76,6 +94,30 @@ export default function WalletPage() {
         </Button>
         {msg && <div className="mt-4 p-3 rounded-lg text-sm font-semibold bg-[rgba(46,204,113,0.08)] border border-[rgba(46,204,113,0.15)] text-[#2ecc71]">{msg}</div>}
       </form>
+
+      <div className="mt-12 border-t border-[rgba(255,255,255,0.06)] pt-8">
+        <h3 className="text-xl font-bold mb-1">Send Coins</h3>
+        <p className="text-sm text-[#7777aa] mb-4">Transfer tokens to another player instantly.</p>
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          setSendMsg('');
+          try {
+            const d = await api.sendTokens(sendUsername.trim(), parseInt(sendAmount));
+            setSendMsg(`Sent ${d.sent} FF to ${d.recipient}!`);
+            setSendUsername('');
+            setSendAmount('');
+          } catch (err) {
+            setSendMsg('Error: ' + err.message);
+          }
+        }} className="glass p-6">
+          <div className="flex flex-col md:flex-row gap-3 mb-4">
+            <input value={sendUsername} onChange={e => setSendUsername(e.target.value)} placeholder="Recipient username" required className="input-field flex-1" />
+            <input value={sendAmount} onChange={e => setSendAmount(e.target.value)} type="number" min="1" placeholder="Amount" required className="input-field w-full md:w-40" />
+          </div>
+          <Button type="submit" className="btn-gradient w-full py-3">Send Tokens</Button>
+          {sendMsg && <div className={`mt-4 p-3 rounded-lg text-sm font-semibold ${sendMsg.startsWith('Sent') ? 'bg-[rgba(46,204,113,0.08)] border border-[rgba(46,204,113,0.15)] text-[#2ecc71]' : 'bg-[rgba(255,107,107,0.08)] border border-[rgba(255,107,107,0.15)] text-[#ff6b6b]'}`}>{sendMsg}</div>}
+        </form>
+      </div>
     </div>
   );
 }

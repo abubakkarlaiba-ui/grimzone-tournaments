@@ -7,7 +7,7 @@ import Button from '@/components/Button';
 function BookingForm() {
   const searchParams = useSearchParams();
   const [tournaments, setTournaments] = useState([]);
-  const [selected, setSelected] = useState(searchParams.get('tournament') || '');
+  const [selected, setSelected] = useState(searchParams.get('tournament_id') || '');
   const [msg, setMsg] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,8 +23,8 @@ function BookingForm() {
     setLoading(true);
     setMsg('');
     try {
-      const data = await api.createBooking({ tournament_title: selected });
-      setMsg(`Slot booked! ${data.roomId ? `Room: ${data.roomId}${data.roomPassword ? ` Pass: ${data.roomPassword}` : ''}` : 'Awaiting room details.'}`);
+      const data = await api.createBooking({ tournament_id: parseInt(selected) });
+      setMsg(`Slot booked! ${data.room_id ? `Room: ${data.room_id}${data.room_password ? ` Pass: ${data.room_password}` : ''}` : 'Awaiting room details.'}`);
     } catch (err) {
       setMsg('Error: ' + err.message);
     } finally {
@@ -46,12 +46,12 @@ function BookingForm() {
       <form onSubmit={handleSubmit} className="glass p-6 gradient-border relative overflow-hidden">
         <div className="mb-5">
           <label className="block text-sm font-semibold text-[#7777aa] mb-1.5">Select Solo Tournament</label>
-          <select value={selected} onChange={e => setSelected(e.target.value)} className="input-field" required>
-            <option value="">Choose a tournament...</option>
-            {soloTournaments.map((t, i) => (
-              <option key={i} value={t.title}>{t.title} - {t.entry_fee} FF</option>
-            ))}
-          </select>
+            <select value={selected} onChange={e => setSelected(e.target.value)} className="input-field" required>
+              <option value="">Choose a tournament...</option>
+              {soloTournaments.map(t => (
+                <option key={t.id} value={t.id}>{t.title} - {t.entry_fee} FF</option>
+              ))}
+            </select>
         </div>
         <Button type="submit" disabled={loading || !selected} className="btn-gradient w-full py-3">
           {loading ? <span className="btn-spinner" /> : 'Confirm Booking'}

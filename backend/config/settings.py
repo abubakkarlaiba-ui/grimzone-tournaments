@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'payments',
     'admin_dashboard',
     'teams',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +101,11 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000').split(',')
 CORS_ALLOW_CREDENTIALS = True
+
+PUSHER_APP_ID = config('PUSHER_APP_ID', default='')
+PUSHER_KEY = config('PUSHER_KEY', default='')
+PUSHER_SECRET = config('PUSHER_SECRET', default='')
+PUSHER_CLUSTER = config('PUSHER_CLUSTER', default='us2')
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Karachi'

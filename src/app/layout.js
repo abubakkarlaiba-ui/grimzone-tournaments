@@ -16,6 +16,8 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "GrimZone Tournaments - Free Fire Tournament Platform",
   description: "Pakistan's premier Free Fire tournament platform. Compete, win prizes, and dominate the battlefield.",
+  icons: { icon: "/logo.png", apple: "/logo.png" },
+  openGraph: { images: ["/logo.png"] },
 };
 
 export default function RootLayout({ children }) {

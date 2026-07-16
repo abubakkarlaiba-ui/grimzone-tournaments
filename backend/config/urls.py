@@ -11,6 +11,7 @@ def home(request):
             'tournaments': '/api/tournaments/',
             'bookings': '/api/bookings/',
             'teams': '/api/teams/',
+            'chat': '/api/chat/',
             'wallet': '/api/wallet/',
             'payments': '/api/payments/',
             'admin': '/api/admin/',
@@ -27,4 +28,5 @@ urlpatterns = [
     path('api/payments/', include('payments.urls')),
     path('api/admin/', include('admin_dashboard.urls')),
     path('api/teams/', include('teams.urls')),
+    path('api/chat/', include('chat.urls')),
 ]

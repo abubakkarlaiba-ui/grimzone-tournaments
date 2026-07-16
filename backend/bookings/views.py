@@ -11,12 +11,12 @@ class BookingListCreate(generics.ListCreateAPIView):
         return Booking.objects.filter(user=self.request.user).order_by('-created_at')
 
     def create(self, request, *args, **kwargs):
-        tournament_title = request.data.get('tournament_title')
-        if not tournament_title:
-            return Response({'error': 'tournament_title is required'}, status=status.HTTP_400_BAD_REQUEST)
+        tournament_id = request.data.get('tournament_id')
+        if not tournament_id:
+            return Response({'error': 'tournament_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            tournament = Tournament.objects.get(title=tournament_title)
+            tournament = Tournament.objects.get(id=tournament_id)
         except Tournament.DoesNotExist:
             return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -27,7 +27,9 @@ class BookingListCreate(generics.ListCreateAPIView):
         if user.tokens < tournament.entry_fee:
             return Response({'error': f'Insufficient tokens. Need {tournament.entry_fee} FF, you have {user.tokens} FF'}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=request.data)
+        data = request.data.copy()
+        data['tournament_title'] = tournament.title
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
 
         user.tokens -= tournament.entry_fee
@@ -36,9 +38,6 @@ class BookingListCreate(generics.ListCreateAPIView):
         tournament.slots_filled += 1
         tournament.save()
 
-        self.perform_create(serializer)
+        serializer.save(user=self.request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)

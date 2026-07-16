@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import Button from '@/components/Button';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function RegisterPage() {
       router.push('/');
       router.refresh();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -41,9 +40,9 @@ export default function RegisterPage() {
               <input type={f.includes('password')||f==='confirm'?'password':f==='email'?'email':'text'} value={form[f]} onChange={e => setForm({...form,[f]:e.target.value})} className="input-field" placeholder={f === 'freefire_name' ? 'Enter your FreeFire in-game name' : `Enter ${f}`} required={f !== 'freefire_name'} />
             </div>
           ))}
-          <Button type="submit" disabled={loading} className="btn-gradient w-full py-3 mt-2">
-            {loading ? <span className="btn-spinner" /> : 'Create Account'}
-          </Button>
+          <button type="submit" disabled={loading} className="btn-gradient w-full py-3 mt-2 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95">
+            {loading ? 'Creating account...' : 'Create Account'}
+          </button>
         </form>
         <div className="text-center mt-4 text-sm text-[#7777aa]">
           Already have an account? <Link href="/login" className="text-[#00d4ff] font-semibold hover:underline">Login here</Link>

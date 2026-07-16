@@ -5,18 +5,20 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
 
-function calcBreakdown(entryFee, totalSlots) {
+function calcBreakdown(entryFee, totalSlots, actualPrizeStr) {
   const total = entryFee * totalSlots;
-  const commission = total * 0.3;
-  const prizePool = total - commission;
-  return {
-    totalCollection: total,
-    commission,
-    prizePool,
-    first: prizePool * 0.5,
-    second: prizePool * 0.3,
-    third: prizePool * 0.2,
-  };
+  const prizePool = parseInt(actualPrizeStr) || total;
+  const commission = total - prizePool;
+  const winners = totalSlots > 8
+    ? [
+        { place:'1st', pct:50, pctVal:0.50, color:'#ffd700', glow:'rgba(255,215,0,0.15)' },
+        { place:'2nd', pct:30, pctVal:0.30, color:'#c0c0c0', glow:'rgba(192,192,192,0.1)' },
+        { place:'3rd', pct:20, pctVal:0.20, color:'#cd7f32', glow:'rgba(205,127,50,0.1)' },
+      ]
+    : [
+        { place:'1st', pct:100, pctVal:1.0, color:'#ffd700', glow:'rgba(255,215,0,0.15)' },
+      ];
+  return { totalCollection: total, commission, prizePool, winners };
 }
 
 function Countdown({ target }) {
@@ -123,7 +125,7 @@ export default function TournamentDetail() {
   const fill = t.slots_filled ?? 0;
   const total = t.total_slots ?? 10;
   const pct = Math.round((fill / total) * 100);
-  const bd = calcBreakdown(t.entry_fee, total);
+  const bd = calcBreakdown(t.entry_fee, total, t.prize_pool);
   const typeColor = t.type === 'solo' ? '#00d4ff' : t.type === 'duo' ? '#8b5cf6' : '#ffd700';
 
   const hasStartTime = !!t.start_time;
@@ -226,27 +228,23 @@ export default function TournamentDetail() {
             <span className="text-sm font-bold text-white">{bd.totalCollection.toFixed(0)} FF</span>
           </div>
           <div className="flex justify-between items-center py-2 px-4 rounded-lg bg-[rgba(255,255,255,0.03)]">
-            <span className="text-sm text-[#7777aa]">Commission (30%)</span>
+            <span className="text-sm text-[#7777aa]">Commission ({bd.totalCollection > 0 ? Math.round(bd.commission / bd.totalCollection * 100) : 0}%)</span>
             <span className="text-sm font-bold text-[#e74c3c]">-{bd.commission.toFixed(0)} FF</span>
           </div>
           <div className="flex justify-between items-center py-2 px-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(0,212,255,0.1)]">
-            <span className="text-sm font-bold text-white">Prize Pool (70%)</span>
+            <span className="text-sm font-bold text-white">Prize Pool ({bd.totalCollection > 0 ? Math.round(bd.prizePool / bd.totalCollection * 100) : 0}%)</span>
             <span className="text-sm font-bold text-[#00d4ff]">{bd.prizePool.toFixed(0)} FF</span>
           </div>
         </div>
         <div className="border-t border-[rgba(255,255,255,0.06)] pt-6">
-          <h3 className="text-sm font-bold text-[#7777aa] uppercase tracking-wider mb-4">Top 3 Winners</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {[
-              { place:'1st', pct:50, amount:bd.first, color:'#ffd700', glow:'rgba(255,215,0,0.15)' },
-              { place:'2nd', pct:30, amount:bd.second, color:'#c0c0c0', glow:'rgba(192,192,192,0.1)' },
-              { place:'3rd', pct:20, amount:bd.third, color:'#cd7f32', glow:'rgba(205,127,50,0.1)' },
-            ].map((p, i) => (
+          <h3 className="text-sm font-bold text-[#7777aa] uppercase tracking-wider mb-4">Winners</h3>
+          <div className="grid grid-cols-1 md:grid-cols-{bd.winners.length} gap-3" style={{gridTemplateColumns:`repeat(${bd.winners.length}, minmax(0, 1fr))`}}>
+            {bd.winners.map((p, i) => (
               <div key={i} className="text-center p-5 rounded-xl border" style={{background:`${p.glow}`,borderColor:`${p.color}20`}}>
                 <div className="text-2xl mb-1">{['🥇','🥈','🥉'][i]}</div>
                 <div className="text-sm font-bold" style={{color:p.color}}>{p.place} Place</div>
                 <div className="text-xs text-[#7777aa]">{p.pct}% of prize pool</div>
-                <div className="text-lg font-extrabold text-white mt-2">{p.amount.toFixed(0)} FF</div>
+                <div className="text-lg font-extrabold text-white mt-2">{(bd.prizePool * p.pctVal).toFixed(0)} FF</div>
               </div>
             ))}
           </div>

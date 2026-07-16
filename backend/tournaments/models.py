@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Tournament(models.Model):
     TYPE_CHOICES = [('solo', 'Solo'), ('duo', 'Duo'), ('squad', 'Squad')]
@@ -13,6 +14,7 @@ class Tournament(models.Model):
     room_id = models.CharField(max_length=50, blank=True, default='')
     room_password = models.CharField(max_length=50, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='hosted_tournaments')
 
     def __str__(self):
         return self.title

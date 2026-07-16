@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import GetStartedBtn from '@/components/GetStartedBtn';
 
 const defaultTournaments = [
   { id:1, title:'Grand Battle Royale', type:'squad', prize_pool:'2000 PKR', entry_fee:25, total_slots:12, slots_filled:3, time:'5:15 PM' },
@@ -15,8 +16,16 @@ async function getTournaments() {
   return defaultTournaments;
 }
 
+async function getSiteStats() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'}/auth/site-stats/`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch {}
+  return { total_users: 0, total_tournaments: 0 };
+}
+
 export default async function HomePage() {
-  const tournaments = await getTournaments();
+  const [tournaments, stats] = await Promise.all([getTournaments(), getSiteStats()]);
 
   return (
     <>
@@ -43,9 +52,7 @@ export default async function HomePage() {
             <Link href="/tournaments" className="btn-gradient inline-flex items-center gap-2 px-8 py-3.5 shadow-[0_0_24px_rgba(0,212,255,0.2)] hover:shadow-[0_0_40px_rgba(0,212,255,0.4)]">
               Browse Tournaments
             </Link>
-            <Link href="/register" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg font-bold text-white bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] backdrop-blur-sm transition-all hover:border-[#00d4ff] hover:text-[#00d4ff] hover:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:-translate-y-1 active:scale-95">
-              Get Started
-            </Link>
+            <GetStartedBtn />
           </div>
         </div>
       </section>
@@ -53,15 +60,15 @@ export default async function HomePage() {
       <section className="max-w-6xl mx-auto px-5 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           {[
-            { icon: '👥', number: '850+', label: 'Active Players' },
-            { icon: '🏆', number: '120+', label: 'Tournaments' },
+            { icon: '👥', number: stats.total_users * 12, suffix: '+', label: 'Active Players' },
+            { icon: '🏆', number: stats.total_tournaments, suffix: '', label: 'Tournaments' },
             { icon: '💰', number: '50K+', label: 'Prizes Awarded' },
             { icon: '⭐', number: '4.9', label: 'Player Rating' },
           ].map((s, i) => (
             <div key={i} className="glass glass-hover p-6 text-center relative overflow-hidden group">
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,#00d4ff,transparent)] opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="text-3xl mb-2">{s.icon}</div>
-              <div className="text-2xl font-black text-white">{s.number}</div>
+              <div className="text-2xl font-black text-white">{s.number}{s.suffix || ''}</div>
               <div className="text-xs text-[#7777aa] mt-1 font-semibold">{s.label}</div>
             </div>
           ))}

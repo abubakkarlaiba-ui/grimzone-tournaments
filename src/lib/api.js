@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+const API_BASE = 'https://grimzone-api.vercel.app/api';
 const listeners = new Set();
 
 function notify() {
@@ -51,7 +51,15 @@ export const api = {
   },
 
   async login(username, password) {
-    const data = await this.request('POST', '/auth/login/', { username, password });
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || data.detail || 'Login failed');
+    }
     this.token = data.token;
     this.user = data.user;
     localStorage.setItem('gz_token', data.token);
@@ -61,7 +69,13 @@ export const api = {
   },
 
   async register(username, email, password, freefire_name) {
-    const data = await this.request('POST', '/auth/register/', { username, email, password, freefire_name });
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password, freefire_name }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.detail || 'Registration failed');
     this.token = data.token;
     this.user = data.user;
     localStorage.setItem('gz_token', data.token);
@@ -88,11 +102,13 @@ export const api = {
   isOwner() { return this.user?.role === 'owner'; },
 
   getTournaments() { return this.request('GET', '/tournaments/'); },
+  getMyTournaments() { return this.request('GET', '/tournaments/?mine=true'); },
   createTournament(data) { return this.request('POST', '/tournaments/', data); },
   updateTournament(id, data) { return this.request('PATCH', `/tournaments/${id}/`, data); },
   deleteTournament(id) { return this.request('DELETE', `/tournaments/${id}/`); },
 
   getWallet() { return this.request('GET', '/wallet/'); },
+  async sendTokens(username, amount) { const d = await this.request('POST', '/wallet/transfer/', { username, amount }); notify(); return d; },
   getBookings() { return this.request('GET', '/bookings/'); },
   async createBooking(data) { const d = await this.request('POST', '/bookings/', data); notify(); return d; },
   submitPayment(formData) { return this.upload('/payments/', formData); },
@@ -114,6 +130,13 @@ export const api = {
   async createTeam(tournament_title) { const d = await this.request('POST', '/teams/create/', { tournament_title }); notify(); return d; },
   async joinTeam(code) { const d = await this.request('POST', '/teams/join/', { code }); notify(); return d; },
   getTeam(code) { return this.request('GET', `/teams/${code}/`); },
+
+  getChatMessages() { return this.request('GET', '/chat/'); },
+  async sendChatMessage(message) { return this.request('POST', '/chat/', { message }); },
+
+  changePassword(oldPassword, newPassword) {
+    return this.request('POST', '/auth/change-password/', { old_password: oldPassword, new_password: newPassword });
+  },
 };
 
 api.init();
