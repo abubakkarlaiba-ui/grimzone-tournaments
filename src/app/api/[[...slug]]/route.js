@@ -1,4 +1,4 @@
-const BACKEND = 'https://grimzone-api.vercel.app';
+const BACKEND = 'https://grimzone-api.onrender.com';
 
 async function proxy(request) {
   const path = request.nextUrl.pathname;
