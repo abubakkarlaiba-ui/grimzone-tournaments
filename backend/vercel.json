@@ -1,12 +1,3 @@
 {
-  "functions": {
-    "api/index.py": {
-      "runtime": "@vercel/python@latest",
-      "includeFiles": "**"
-    }
-  },
-  "trailingSlash": true,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.py" }
-  ]
+  "trailingSlash": true
 }
