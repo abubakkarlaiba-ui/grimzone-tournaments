@@ -169,11 +169,16 @@ export default function TournamentDetail() {
               </p>
             )}
           </div>
-          {!hasStarted && (
-            <Link href={`/booking?tournament=${encodeURIComponent(t.title)}`} className="px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1 active:scale-95">
-              Book Slot
-            </Link>
-          )}
+          <div className="flex flex-col items-end gap-2">
+            {!hasStarted && (
+              <Link href={`/booking?tournament=${encodeURIComponent(t.title)}`} className="px-8 py-3.5 rounded-lg font-bold text-white bg-[linear-gradient(135deg,#00d4ff,#8b5cf6)] shadow-[0_0_24px_rgba(0,212,255,0.2)] transition-all hover:shadow-[0_0_40px_rgba(0,212,255,0.4)] hover:-translate-y-1 active:scale-95">
+                Book Slot
+              </Link>
+            )}
+            <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Link copied!'); }} className="text-xs text-[#7777aa] hover:text-[#00d4ff] transition-colors flex items-center gap-1" aria-label="Share tournament">
+              📤 Share
+            </button>
+          </div>
         </div>
 
         {hasStartTime && !hasStarted && <Countdown target={t.start_time} />}
@@ -202,11 +207,13 @@ export default function TournamentDetail() {
                   <div className="flex items-center gap-3 py-2 px-4 rounded-lg bg-[rgba(0,212,255,0.06)] border border-[rgba(0,212,255,0.1)]">
                     <span className="text-sm text-[#7777aa]">Room ID:</span>
                     <span className="text-lg font-black text-white tracking-wider">{t.room_id}</span>
+                    <button onClick={() => { navigator.clipboard.writeText(t.room_id); }} className="ml-auto text-xs text-[#7777aa] hover:text-[#00d4ff] transition-colors px-2 py-1 rounded hover:bg-[rgba(0,212,255,0.1)]" aria-label="Copy Room ID">📋 Copy</button>
                   </div>
                   {t.room_password && (
                     <div className="flex items-center gap-3 py-2 px-4 rounded-lg bg-[rgba(139,92,246,0.06)] border border-[rgba(139,92,246,0.1)]">
                       <span className="text-sm text-[#7777aa]">Password:</span>
                       <span className="text-lg font-black text-[#8b5cf6] tracking-wider">{t.room_password}</span>
+                      <button onClick={() => { navigator.clipboard.writeText(t.room_password); }} className="ml-auto text-xs text-[#7777aa] hover:text-[#8b5cf6] transition-colors px-2 py-1 rounded hover:bg-[rgba(139,92,246,0.1)]" aria-label="Copy Password">📋 Copy</button>
                     </div>
                   )}
                 </div>

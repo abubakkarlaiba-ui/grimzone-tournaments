@@ -1,3 +1,9 @@
+export const metadata = {
+  title: 'Rules',
+  description: 'Fair play rules for all Free Fire tournament participants on GrimZone.',
+  openGraph: { title: 'Rules - GrimZone', description: 'Fair play rules for all Free Fire tournament participants.' },
+};
+
 export default function RulesPage() {
   const rules = [
     { num: 1, title: 'Fair Competition', desc: 'All matches are monitored. Any form of cheating or hacking results in immediate disqualification.' },

@@ -1,3 +1,9 @@
+export const metadata = {
+  title: 'Contact',
+  description: 'Get in touch with GrimZone support via WhatsApp or email.',
+  openGraph: { title: 'Contact - GrimZone', description: 'Get in touch with GrimZone support.' },
+};
+
 export default function ContactPage() {
   return (
     <div className="px-5 py-16">

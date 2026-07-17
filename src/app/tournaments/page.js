@@ -1,5 +1,11 @@
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Tournaments',
+  description: 'Browse all Free Fire tournaments on GrimZone. Book your slot and compete for prizes.',
+  openGraph: { title: 'Tournaments - GrimZone', description: 'Browse all Free Fire tournaments on GrimZone. Book your slot and compete for prizes.' },
+};
+
 const defaultTournaments = [
   { id:1, title:'Grand Battle Royale', type:'squad', prize_pool:'2000 PKR', entry_fee:25, total_slots:12, slots_filled:3, time:'5:15 PM' },
   { id:2, title:'Squad Showdown', type:'squad', prize_pool:'1000 PKR', entry_fee:15, total_slots:12, slots_filled:5, time:'6:00 PM' },
