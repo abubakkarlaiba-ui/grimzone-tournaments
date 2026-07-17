@@ -1,4 +1,4 @@
-const API_BASE = 'https://grimzone-api.vercel.app/api';
+const API_BASE = '/api';
 const listeners = new Set();
 
 function notify() {
@@ -47,6 +47,15 @@ export const api = {
       }
       throw new Error(msgs.join(' ') || 'Request failed');
     }
+    return data;
+  },
+
+  async upload(path, formData) {
+    const opts = { method: 'POST', body: formData };
+    if (this.token) opts.headers = { Authorization: `Bearer ${this.token}` };
+    const res = await fetch(`${API_BASE}${path}`, opts);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
     return data;
   },
 
