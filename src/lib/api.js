@@ -136,6 +136,8 @@ export const api = {
 
   getUserBookings() { return this.request('GET', '/bookings/'); },
 
+  searchUsers(q) { return this.request('GET', `/wallet/search-users/?q=${encodeURIComponent(q)}`); },
+
   getMyTeams() { return this.request('GET', '/teams/'); },
   async createTeam(tournament_title) { const d = await this.request('POST', '/teams/create/', { tournament_title }); notify(); return d; },
   async joinTeam(code) { const d = await this.request('POST', '/teams/join/', { code }); notify(); return d; },

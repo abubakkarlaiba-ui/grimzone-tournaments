@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -73,3 +74,18 @@ class TransferTokensView(APIView):
             'recipient': recipient.username,
             'balance': sender.tokens,
         })
+
+class UserSearchView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        q = request.GET.get('q', '').strip()
+        if len(q) < 1:
+            return Response([], status=200)
+        users = User.objects.filter(
+            Q(username__icontains=q) | Q(freefire_name__icontains=q)
+        ).exclude(id=request.user.id)[:10]
+        return Response([
+            {'id': u.id, 'username': u.username, 'freefire_name': u.freefire_name or ''}
+            for u in users
+        ])

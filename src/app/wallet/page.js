@@ -14,6 +14,8 @@ export default function WalletPage() {
   const [sendUsername, setSendUsername] = useState('');
   const [sendAmount, setSendAmount] = useState('');
   const [sendMsg, setSendMsg] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   function fetchWallet() {
     setLoggedIn(api.isLoggedIn());
@@ -106,12 +108,38 @@ export default function WalletPage() {
             setSendMsg(`Sent ${d.sent} FF to ${d.recipient}!`);
             setSendUsername('');
             setSendAmount('');
+            setSearchResults([]);
           } catch (err) {
             setSendMsg('Error: ' + err.message);
           }
         }} className="glass p-6">
           <div className="flex flex-col md:flex-row gap-3 mb-4">
-            <input value={sendUsername} onChange={e => setSendUsername(e.target.value)} placeholder="Recipient username" required className="input-field flex-1" />
+            <div className="relative flex-1">
+              <input value={sendUsername} onChange={async (e) => {
+                const val = e.target.value;
+                setSendUsername(val);
+                if (val.length >= 1) {
+                  try {
+                    const results = await api.searchUsers(val);
+                    setSearchResults(results);
+                    setShowDropdown(results.length > 0);
+                  } catch { setSearchResults([]); }
+                } else {
+                  setSearchResults([]);
+                  setShowDropdown(false);
+                }
+              }} onFocus={() => searchResults.length > 0 && setShowDropdown(true)} placeholder="Type username or IGN..." required className="input-field w-full" />
+              {showDropdown && searchResults.length > 0 && (
+                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-lg overflow-hidden shadow-xl">
+                  {searchResults.map(u => (
+                    <button type="button" key={u.id} onClick={() => { setSendUsername(u.username); setShowDropdown(false); setSearchResults([]); }} className="w-full px-4 py-2.5 text-left hover:bg-[rgba(0,212,255,0.08)] transition-colors border-b border-[rgba(255,255,255,0.04)] last:border-0">
+                      <span className="text-sm font-semibold text-white">{u.username}</span>
+                      {u.freefire_name && <span className="text-xs text-[#7777aa] ml-2">({u.freefire_name})</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <input value={sendAmount} onChange={e => setSendAmount(e.target.value)} type="number" min="1" placeholder="Amount" required className="input-field w-full md:w-40" />
           </div>
           <Button type="submit" className="btn-gradient w-full py-3">Send Tokens</Button>
