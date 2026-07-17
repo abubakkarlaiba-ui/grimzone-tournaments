@@ -1,3 +1,11 @@
 {
-  "trailingSlash": true
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "**"
+    }
+  },
+  "trailingSlash": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index.py" }
+  ]
 }
