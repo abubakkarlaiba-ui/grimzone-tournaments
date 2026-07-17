@@ -28,6 +28,14 @@ export default function WalletPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (sendUsername.trim().length < 1) { setSearchResults([]); setShowDropdown(false); return; }
+    const timer = setTimeout(() => {
+      api.searchUsers(sendUsername.trim()).then(r => { setSearchResults(r); setShowDropdown(r.length > 0); }).catch(() => { setSearchResults([]); setShowDropdown(false); });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [sendUsername]);
+
   function fetchWallet() {
     setLoggedIn(api.isLoggedIn());
     if (api.isLoggedIn()) {
@@ -126,21 +134,8 @@ export default function WalletPage() {
         }} className="glass p-6">
           <div className="flex flex-col md:flex-row gap-3 mb-4">
             <div className="relative flex-1" ref={searchRef}>
-              <input value={sendUsername} onChange={async (e) => {
-                const val = e.target.value;
-                setSendUsername(val);
-                if (val.length >= 1) {
-                  try {
-                    const results = await api.searchUsers(val);
-                    setSearchResults(results);
-                    setShowDropdown(results.length > 0);
-                  } catch { setSearchResults([]); setShowDropdown(false); }
-                } else {
-                  setSearchResults([]);
-                  setShowDropdown(false);
-                }
-              }} placeholder="Type username or IGN..." required className="input-field w-full" />
-              {showDropdown && searchResults.length > 0 && (
+              <input value={sendUsername} onChange={(e) => { setSendUsername(e.target.value); setShowDropdown(false); }} onFocus={() => { if (searchResults.length > 0 && sendUsername.length >= 1) setShowDropdown(true); }} placeholder="Recipient username" required className="input-field w-full" />
+              {showDropdown && searchResults.length > 0 && sendUsername.length >= 1 && (
                 <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-lg overflow-hidden shadow-xl max-h-48 overflow-y-auto">
                   {searchResults.map(u => (
                     <button type="button" key={u.id} onMouseDown={(e) => { e.preventDefault(); setSendUsername(u.username); setShowDropdown(false); setSearchResults([]); }} className="w-full px-4 py-2.5 text-left hover:bg-[rgba(0,212,255,0.08)] transition-colors border-b border-[rgba(255,255,255,0.04)] last:border-0">
