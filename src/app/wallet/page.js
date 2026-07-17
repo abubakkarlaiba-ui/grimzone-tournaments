@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Pusher from 'pusher-js';
 import { api } from '@/lib/api';
 import Button from '@/components/Button';
@@ -16,6 +16,17 @@ export default function WalletPage() {
   const [sendMsg, setSendMsg] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   function fetchWallet() {
     setLoggedIn(api.isLoggedIn());
@@ -114,7 +125,7 @@ export default function WalletPage() {
           }
         }} className="glass p-6">
           <div className="flex flex-col md:flex-row gap-3 mb-4">
-            <div className="relative flex-1">
+            <div className="relative flex-1" ref={searchRef}>
               <input value={sendUsername} onChange={async (e) => {
                 const val = e.target.value;
                 setSendUsername(val);
@@ -123,16 +134,16 @@ export default function WalletPage() {
                     const results = await api.searchUsers(val);
                     setSearchResults(results);
                     setShowDropdown(results.length > 0);
-                  } catch { setSearchResults([]); }
+                  } catch { setSearchResults([]); setShowDropdown(false); }
                 } else {
                   setSearchResults([]);
                   setShowDropdown(false);
                 }
-              }} onFocus={() => searchResults.length > 0 && setShowDropdown(true)} placeholder="Type username or IGN..." required className="input-field w-full" />
+              }} placeholder="Type username or IGN..." required className="input-field w-full" />
               {showDropdown && searchResults.length > 0 && (
-                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-lg overflow-hidden shadow-xl">
+                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-lg overflow-hidden shadow-xl max-h-48 overflow-y-auto">
                   {searchResults.map(u => (
-                    <button type="button" key={u.id} onClick={() => { setSendUsername(u.username); setShowDropdown(false); setSearchResults([]); }} className="w-full px-4 py-2.5 text-left hover:bg-[rgba(0,212,255,0.08)] transition-colors border-b border-[rgba(255,255,255,0.04)] last:border-0">
+                    <button type="button" key={u.id} onMouseDown={(e) => { e.preventDefault(); setSendUsername(u.username); setShowDropdown(false); setSearchResults([]); }} className="w-full px-4 py-2.5 text-left hover:bg-[rgba(0,212,255,0.08)] transition-colors border-b border-[rgba(255,255,255,0.04)] last:border-0">
                       <span className="text-sm font-semibold text-white">{u.username}</span>
                       {u.freefire_name && <span className="text-xs text-[#7777aa] ml-2">({u.freefire_name})</span>}
                     </button>
