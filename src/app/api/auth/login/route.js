@@ -1,7 +1,7 @@
 export async function POST(request) {
   try {
     const body = await request.json();
-    const res = await fetch('https://grimzone-api.onrender.com/api/auth/login/', {
+    const res = await fetch('https://grimzone-api.vercel.app/api/auth/login/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: body.username, password: body.password }),

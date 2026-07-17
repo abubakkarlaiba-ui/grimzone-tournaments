@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = 'https://grimzone-api.vercel.app/api';
 const listeners = new Set();
 
 function notify() {
