@@ -9,6 +9,7 @@ from tournaments.models import Tournament
 from bookings.models import Booking
 from bookings.serializers import BookingSerializer
 from accounts.serializers import UserSerializer
+from chat.models import ChatMessage
 
 User = get_user_model()
 
@@ -162,6 +163,39 @@ class AdminRoomSetView(APIView):
             return Response({'status': 'ok'})
         except Booking.DoesNotExist:
             return Response({'error': 'Booking not found'}, status=404)
+
+class AdminBanUserView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+        if user.role == 'owner':
+            return Response({'error': 'Cannot ban the owner'}, status=403)
+        now_banned = not user.is_banned
+        user.is_banned = now_banned
+        user.save()
+
+        if now_banned:
+            in_game_name = user.freefire_name or user.username
+            msg = ChatMessage.objects.create(
+                user=request.user,
+                message=f'🔨 {request.user.username} banned {in_game_name}'
+            )
+            if pusher_client:
+                try:
+                    pusher_client.trigger('chat-room', 'new-message', {
+                        'id': msg.id,
+                        'username': request.user.username,
+                        'message': msg.message,
+                        'created_at': str(msg.created_at),
+                    })
+                except Exception:
+                    pass
+
+        return Response({'status': 'ok', 'is_banned': user.is_banned, 'user': UserSerializer(user).data})
 
 class AdminResetPasswordView(APIView):
     permission_classes = [permissions.IsAdminUser]

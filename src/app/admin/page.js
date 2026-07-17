@@ -143,6 +143,14 @@ export default function AdminDashboard() {
     } catch (err) { showMsg('Error: ' + err.message, true); }
   }
 
+  async function handleBan(userId) {
+    try {
+      const d = await api.banUser(userId);
+      showMsg(`User #${userId} ${d.is_banned ? 'banned' : 'unbanned'}`);
+      setUsers(await api.getUsers());
+    } catch (err) { showMsg('Error: ' + err.message, true); }
+  }
+
   const tabs = ['overview', 'tournaments', 'payments', 'bookings', 'users'];
 
   return (
@@ -291,24 +299,25 @@ export default function AdminDashboard() {
           </div>
           <div className="glass overflow-hidden">
             <table className="w-full">
-              <thead><tr>{['ID','Username','Email','Tokens','Role', isOwner ? 'Actions' : ''].filter(Boolean).map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
+              <thead><tr>{['ID','Username','Email','Tokens','Role','Actions'].map(h => <th key={h} className="text-left p-3 text-xs font-bold text-[#7777aa] uppercase border-b border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)]">{h}</th>)}</tr></thead>
               <tbody>{users.map(u => <tr key={u.id} className="border-b border-[rgba(255,255,255,0.06)]">
                 <td className="p-3 text-xs text-[#7777aa]">{u.id}</td>
                 <td className="p-3 text-sm font-semibold">{u.username} {u.role === 'owner' ? '👑' : ''}</td>
                 <td className="p-3 text-sm">{u.email}</td>
                 <td className="p-3 text-sm">{u.tokens ?? 0}</td>
                 <td className="p-3 text-sm capitalize"><span className={`inline-block px-2 py-0.5 rounded text-xs font-bold uppercase ${u.role === 'owner' ? 'text-[#8b5cf6] bg-[rgba(139,92,246,0.1)]' : u.role === 'admin' ? 'text-[#00d4ff] bg-[rgba(0,212,255,0.1)]' : 'text-[#7777aa] bg-[rgba(255,255,255,0.04)]'}`}>{u.role || 'player'}</span></td>
-                {isOwner && <td className="p-3">
+                <td className="p-3">
                   {u.role !== 'owner' && (
                     <div className="flex gap-1">
-                      {u.role === 'admin' ? (
+                      {isOwner && (u.role === 'admin' ? (
                         <Button onClick={() => handleRoleUpdate(u.id, 'player')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#e74c3c] hover:brightness-110 active:scale-90 transition-all">Demote</Button>
                       ) : (
                         <Button onClick={() => handleRoleUpdate(u.id, 'admin')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 active:scale-90 transition-all">Promote</Button>
-                      )}
+                      ))}
+                      <Button onClick={() => handleBan(u.id)} className={`px-2 py-1 rounded text-xs font-bold text-white ${u.is_banned ? 'bg-[#2ecc71]' : 'bg-[#e74c3c]'} hover:brightness-110 active:scale-90 transition-all`}>{u.is_banned ? 'Unban' : 'Ban'}</Button>
                     </div>
                   )}
-                </td>}
+                </td>
               </tr>)}</tbody>
             </table>
           </div>

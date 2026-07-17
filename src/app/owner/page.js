@@ -138,6 +138,14 @@ export default function OwnerDashboard() {
     } catch (err) { showMsg('Error: ' + err.message, true); }
   }
 
+  async function handleBan(userId) {
+    try {
+      const d = await api.banUser(userId);
+      showMsg(`User #${userId} ${d.is_banned ? 'banned' : 'unbanned'}`);
+      setUsers(await api.getUsers());
+    } catch (err) { showMsg('Error: ' + err.message, true); }
+  }
+
   const tabs = ['overview', 'tournaments', 'payments', 'bookings', 'users'];
 
   return (
@@ -302,6 +310,7 @@ export default function OwnerDashboard() {
                       ) : (
                         <Button onClick={() => handleRoleUpdate(u.id, 'admin')} className="px-2 py-1 rounded text-xs font-bold text-white bg-[#2ecc71] hover:brightness-110 active:scale-90 transition-all">Promote</Button>
                       )}
+                      <Button onClick={() => handleBan(u.id)} className={`px-2 py-1 rounded text-xs font-bold text-white ${u.is_banned ? 'bg-[#2ecc71]' : 'bg-[#e74c3c]'} hover:brightness-110 active:scale-90 transition-all`}>{u.is_banned ? 'Unban' : 'Ban'}</Button>
                     </div>
                   )}
                 </td>

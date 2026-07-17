@@ -126,6 +126,7 @@ export const api = {
   verifyPayment(id, action) { return this.request('POST', `/admin/payments/${id}/verify/`, { action }); },
   getUsers() { return this.request('GET', '/admin/users/'); },
   updateUserRole(userId, role) { return this.request('POST', `/admin/users/${userId}/role/`, { role }); },
+  banUser(userId) { return this.request('POST', `/admin/users/${userId}/ban/`); },
   async addTokens(userId, amount) { const d = await this.request('POST', '/admin/tokens/', { userId, amount }); notify(); return d; },
   async deductTokens(userId, amount) { const d = await this.request('POST', '/admin/tokens/deduct/', { userId, amount }); notify(); return d; },
   getAdminStats() { return this.request('GET', '/admin/stats/'); },

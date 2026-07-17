@@ -11,5 +11,6 @@ urlpatterns = [
     path('tokens/deduct/', views.AdminDeductTokensView.as_view()),
     path('bookings/', views.AdminBookingListView.as_view()),
     path('set-room/', views.AdminRoomSetView.as_view()),
+    path('users/<int:pk>/ban/', views.AdminBanUserView.as_view()),
     path('users/<int:pk>/reset-password/', views.AdminResetPasswordView.as_view()),
 ]
